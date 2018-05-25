@@ -1,0 +1,33 @@
+.detail-container {
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  font-size: 26rpx;
+  margin-bottom: 10rpx;
+  /* box-shadow: 0 1rpx 5rpx 0 rgba(0, 0, 0, 0.1); */
+}
+
+.deductionBox {
+  display: flex;
+  padding: 15rpx 30rpx;
+  border-bottom: 1px solid #eee;
+}
+
+.deductionBox>text {
+  flex: 1;
+  color: #19a2ff;
+  border-right: 1px solid #eee;
+}
+
+.deductionBox>text:nth-child(2) {
+  border: none;
+  margin-left: 40rpx;
+}
+
+.contentBox {
+  padding: 15rpx 30rpx;
+}
+
+.contentBox>text {
+  color: #19a2ff;
+}

@@ -1,0 +1,26 @@
+<template name='recordTemplate'>
+  <view class='recordTem-container'>
+    <!-- 训练模式 -->
+    <view class='trainingPattern'>
+      <!-- 训练时间 -->
+      <view class='trainingTimeBox'>
+        <text>2017年2月28日</text>
+        <text>训练模式</text>
+        <text>14:00-15:00</text>
+      </view>
+      <!-- 训练路线 -->
+      <view class='trainingPath'>
+        <text>练车路线：<text>青竹湖标准线路</text></text>
+      </view>
+    </view>
+    <!-- 训练得分 -->
+    <view class='TrainingScoreBox'>
+      <text>教练：刘正辉</text>
+      <text>得分：100</text>
+      <view bindtap='jumpRecordDetails'>
+        <text>查看详情</text>
+        <image class='enterArrow' src='/images/enterArrow.png'></image>
+      </view>
+    </view>
+  </view>
+</template>

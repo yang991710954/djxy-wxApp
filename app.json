@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/myInfo/editUserInfo/editUserInfo",
+    "pages/courseRecord/courseRecord",
+    "pages/trainingRecords/trainingRecords",
+    "pages/purchaseCourse/purchaseNow/purchaseNow",
+    "pages/purchaseCourse/purchaseCourse",
+    "pages/selectTrainingMode/selectTrainingMode",
+    "pages/coachCard/coachCard",
+    "pages/recordDetails/recordDetails",
+    "pages/myInfo/myInfo",
+    "pages/myInfo/bindUser/bindUser",
+    "pages/bindCoach/bindCoach",
+    "pages/bindCoach/SearchPhone/SearchPhone"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#000000",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#aaaaaa",
+    "selectedColor": "#19a2ff",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/myInfo/myInfo",
+        "iconPath": "images/myInfo.png",
+        "selectedIconPath": "images/myInfo-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000,
+    "connectSocket": 10000
+  },
+  "debug": true
+}

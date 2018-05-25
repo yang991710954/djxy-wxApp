@@ -1,0 +1,251 @@
+@import "./coachesOrCourses/coachesOrCourses-template.wxss";
+page{
+  background-color: #fff;
+}
+
+.home-tarbar {
+  width: 100%;
+  height: 250rpx;
+}
+
+.practiceInfo-container {
+  width: 100%;
+  height: 380rpx;
+  position: relative;
+}
+
+.bg-img {
+  width: 100%;
+  height: 380rpx;
+}
+
+.btnBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12rpx;
+  position: absolute;
+  left: 30rpx;
+  bottom: 30rpx;
+  width: 690rpx;
+  height: 118rpx;
+  background-color: #19a2ff;
+}
+
+.btnContent {
+  margin-top: 30rpx;
+}
+
+.btnContent>.scanQR {
+  width: 34rpx;
+  height: 34rpx;
+  vertical-align: middle;
+  margin-right: 20rpx;
+}
+
+.btnContent>text {
+  font-size: 34rpx;
+  color: #fff;
+}
+
+.notBound-container {
+  width: 100%;
+  height: 200rpx;
+  position: relative;
+}
+
+.sm-img {
+  width: 100%;
+  height: 200rpx;
+}
+
+.notBoundBox {
+  position: absolute;
+  z-index: 100;
+  top: 40rpx;
+  left: 30rpx;
+  width: 690rpx;
+  height: 118rpx;
+  text-align: center;
+  line-height: 118rpx;
+  background-color: #19a2ff;
+  border-radius: 15rpx;
+}
+
+.bindBtn {
+  font-size: 34rpx;
+  color: #fff;
+}
+
+/* 练车记录模块 */
+
+.PracticeCarRecordingModule {
+  width: 100%;
+}
+
+.title-container {
+  padding: 20rpx 40rpx;
+  /*display:flex;
+  flex-direction: row;
+  justify-content:space-between;*/
+}
+
+.titleName {
+  font-size: 35rpx;
+  color: #19a2ff;
+}
+
+.RecordJumpBox {
+  float: right;
+}
+
+.RecordJump {
+  vertical-align: middle;
+  margin-right: 10rpx;
+  color: #666;
+  font-size: 30rpx;
+}
+
+.RecordJumpIcon {
+  width: 24rpx;
+  height: 24rpx;
+  vertical-align: middle;
+}
+
+/* 上次练车成绩 */
+
+.reportCard-container {
+  width: 100%;
+  position: relative;
+}
+
+.score-container {
+  width: 100%;
+  height: 150rpx;
+  padding-top: 30rpx;
+  padding-bottom: 120rpx;
+  position: relative;
+}
+
+.score-bg {
+  width: 100%;
+  height: 150rpx;
+}
+
+.scoreBox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.score {
+  position: absolute;
+  top: 90rpx;
+  left: 80rpx;
+  z-index: 1000;
+  width: 250rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+}
+
+.PracticalScoreBox {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.PracticalScore {
+  font-size: 42rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.noScore {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.carsPracticeResults {
+  position: absolute;
+  top: 50rpx;
+  left: 80rpx;
+  width: 250rpx;
+  height: 180rpx;
+}
+
+.annotation {
+  position: absolute;
+  top: 180rpx;
+  left: 130rpx;
+  font-size: 24rpx;
+  color: #fff;
+}
+
+.timeMileage-container {
+  position: absolute;
+  top: 80rpx;
+  left: 370rpx;
+  z-index: 1000;
+}
+
+.mileageBox, .timeBox {
+  margin: 15rpx 0;
+}
+
+.mileageBox>text, .timeBox>text {
+  font-size: 30rpx;
+  color: #666;
+}
+
+.mileageNum {
+  font-size: 46rpx;
+  color: #ff5047;
+}
+
+.timeNum {
+  font-size: 40rpx;
+  color: #ff5047;
+}
+
+.ExhibitionMode-container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 50rpx;
+  padding-bottom: 80rpx;
+  background-color: #fff;
+}
+
+.modeBox {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #ebebeb;
+}
+
+.modeBox:last-child {
+  border: none;
+}
+
+.modeBox>image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.modeBox>.modeNum {
+  font-size: 60rpx;
+  color: #333;
+  margin-top: 20rpx;
+  margin-bottom: 35rpx;
+}
+
+.modeBox>.modeTitle {
+  font-size: 35rpx;
+  color: #999;
+}

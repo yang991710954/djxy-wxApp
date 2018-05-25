@@ -1,0 +1,8 @@
+<view class='description-container'>
+  <image src='/images/testImg/test1.jpeg'></image>
+  <image src='/images/testImg/test1.jpeg'></image>
+  <image src='/images/testImg/test1.jpeg'></image>
+</view>
+<view class='purchaseBtn' bindtap='jumpPage'>
+  <text>马上购买课程</text>
+</view>

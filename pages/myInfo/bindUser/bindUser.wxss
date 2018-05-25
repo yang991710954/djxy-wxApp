@@ -1,0 +1,164 @@
+.layer-container {
+  position: relative;
+  z-index: 19891014;
+}
+
+.mask-layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  /* pointer-events: auto; */
+  pointer-events: none;
+}
+
+.layer-main {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
+  font-family: Helvetica, arial, sans-serif;
+}
+
+.layer-section {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  box-sizing: content-box;
+}
+
+.layer-child {
+  /* width: 80%; */
+  max-width: 640px;
+  position: relative;
+  display: inline-block;
+  text-align: left;
+  font-size: 26rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 0 5rpx rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+}
+
+.accredit-container {
+  width: 560rpx;
+  height: 750rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  position: relative;
+  margin-top: -100rpx;
+}
+
+.auth-bg {
+  width: 560rpx;
+  height: 750rpx;
+}
+
+.loginAuth-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 560rpx;
+  height: 750rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginAuto-title {
+  margin: 100rpx 0;
+}
+
+.loginAuto-title>text {
+  font-size: 40rpx;
+  color: #fff;
+}
+
+.loginItemBox {
+  width: 70%;
+  margin-top: 15rpx;
+  margin-bottom: 15rpx;
+  border-bottom: 1px solid #ccc;
+}
+
+.loginItemBox>text {
+  font-size: 28rpx;
+  color: #9e9f9f;
+}
+
+.weui-input {
+  margin: 10rpx 0;
+  background-color: #fff;
+  width: 100%;
+  height: 56rpx;
+  font-size: 32rpx;
+  color: #383838;
+  text-align: left;
+  padding: 0;
+}
+
+.AuthCode-input {
+  position: relative;
+}
+
+.getAuthCode {
+  position: absolute;
+  top: 3rpx;
+  right: 0;
+  height: 56rpx;
+  z-index: 100;
+}
+
+.getAuthCode>text {
+  padding: 10px 0 10rpx 20rpx;
+  cursor: pointer;
+  color: #19a2ff;
+  height: 56rpx;
+  line-height: 56rpx;
+  font-size: 28rpx;
+}
+
+.getAuthCode>.regain {
+  color: #999;
+}
+
+.authBtn-group {
+  width: 70%;
+}
+
+.btn-Item {
+  display: inline-block;
+  width: 100%;
+  line-height: 1;
+  white-space: nowrap;
+  -webkit-appearance: none;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 25rpx 10rpx;
+  border-radius: 10rpx;
+  margin-top: 15rpx;
+}
+
+.btn-Item:nth-child(1) {
+  border: 1px solid #bfcbd9;
+  background-color: #20a0ff;
+  border-color: #20a0ff;
+}
+
+.btn-Item>text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.btn-Item:nth-child(2)>text {
+  color: #20a0ff;
+}

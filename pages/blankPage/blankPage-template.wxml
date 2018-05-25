@@ -1,0 +1,6 @@
+<template name='blankTemplate'>
+  <view class='blank-container'>
+    <image class='nodataImg' mode='aspectFit' src='/images/no-data.png'></image>
+    <text class='nodataTxt'>当前还没有练车记录</text>
+  </view>
+</template>

@@ -1,0 +1,31 @@
+.searchMode {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60rpx;
+}
+
+.searchModeItem {
+  width: 620rpx;
+  height: 110rpx;
+  margin-bottom: 30rpx;
+  line-height: 110rpx;
+  text-align: center;
+  border-radius: 55rpx;
+  background-color: #19a2ff;
+  position: relative;
+}
+
+.searchModeItem>text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.searchModeItem>.whiteArrow {
+  position: absolute;
+  right: 40rpx;
+  top: 40rpx;
+  width: 30rpx;
+  height: 30rpx;
+}

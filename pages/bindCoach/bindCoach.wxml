@@ -1,0 +1,12 @@
+<!-- 绑定教练 -->
+<view class='searchMode'>
+  <view class='searchModeItem' bindtap='jumpScanQRPage'>
+    <text>扫描教练名片二维码</text>
+    <image class="whiteArrow" src='/images/whiteArrow.png'></image>
+  </view>
+
+  <view class='searchModeItem' bindtap='jumpPhoneSearch'>
+    <text>通过手机号码搜索</text>
+    <image class="whiteArrow" src='/images/whiteArrow.png'></image>
+  </view>
+</view>

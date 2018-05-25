@@ -1,0 +1,83 @@
+<import src="./coachesOrCourses/coachesOrCourses-template.wxml" />
+
+<!-- banner -->
+<image class="home-tarbar" bindtap='jumpPurchaseCourse' src='/images/purchaseCourse.png'></image>
+
+<view>
+  <!-- 绑定教练 -->
+  <view wx:if="{{true}}" class="practiceInfo-container">
+    <image class="bg-img" src='/images/background-big.png'></image>
+    <template is="coachesOrCourses" data="{{coachName}}" />
+    <!-- 扫码练车 -->
+    <view class="btnBox" bindtap='onScanQR'>
+      <view class="btnContent">
+        <image class="scanQR" src="/images/scanQR.png"></image>
+        <text>扫码练车</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未绑定教练 -->
+  <view wx:else class="notBound-container" bindtap='onBindCoach'>
+    <image class="sm-img" src='/images/background-small.png'></image>
+    <view class="notBoundBox">
+      <text class="bindBtn">请先绑定教练</text>
+    </view>
+  </view>
+</view>
+
+<!-- 练车记录模块 -->
+<view class='PracticeCarRecordingModule'>
+  <!-- 标题 -->
+  <view class='title-container'>
+    <text class='titleName'>练车记录</text>
+    <view class='RecordJumpBox' bindtap='lookAllTrainRecords'>
+      <text class='RecordJump'>全部练车记录</text>
+      <image class='RecordJumpIcon' src='/images/jump.png'></image>
+    </view>
+  </view>
+
+  <!-- 上次练车成绩 -->
+  <view class="reportCard-container">
+    <view class='score-container'>
+      <image class='score-bg' src='/images/electrocardiogram.png'></image>
+      <view class='scoreBox'>
+        <view class='score'>
+          <text wx:if="{{false}}" class='PracticalScoreBox'><text class='PracticalScore'>100</text>分</text>
+          <text wx:else class='noScore'>暂无</text>
+        </view>
+        <image class='carsPracticeResults' src='/images/carsPracticeResults.png'></image>
+        <text class='annotation'>上次练车成绩</text>
+      </view>
+    </view>
+
+    <view class='timeMileage-container'>
+      <view class='mileageBox'>
+        <text class='mileageAll'>总里程：<text class='mileageNum'>{{mileageNum}} </text>公里</text>
+      </view>
+      <view class='timeBox'>
+        <text class='timeAll'>总时间：<text class='timeNum'>00:00</text></text>
+      </view>
+    </view>
+  </view>
+
+  <view class='ExhibitionMode-container'>
+    <view class='modeBox'>
+      <image mode='aspectFit' src='/images/practiceCarNumber.png'></image>
+      <text class='modeNum'>0</text>
+      <text class='modeTitle'>共计练车</text>
+    </view>
+
+    <view class='modeBox'>
+      <image mode='aspectFit' src='/images/trainingPattern.png'></image>
+      <text class='modeNum'>0</text>
+      <text class='modeTitle'>训练模式</text>
+    </view>
+
+    <view class='modeBox'>
+      <image mode='aspectFit' src='/images/examinationMode.png'></image>
+      <text class='modeNum'>0</text>
+      <text class='modeTitle'>考试模式</text>
+    </view>
+  </view>
+</view>

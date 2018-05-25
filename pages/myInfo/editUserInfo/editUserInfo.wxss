@@ -1,0 +1,123 @@
+.myInfoBox {
+  height: 200rpx;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+}
+
+.myImgBox {
+  width: 140rpx;
+  height: 140rpx;
+  margin-top: 30rpx;
+  margin-left: 40rpx;
+  border-radius: 50%;
+  border: 1px solid #ebeef5;
+  position: relative;
+}
+
+.myImgBox>.userImgBox {
+  width: 140rpx;
+  height: 140rpx;
+}
+
+.userImgBox>.userImg {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  box-shadow: 0 2rpx 10rpx 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: block;
+}
+
+.myNameBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 40rpx;
+}
+
+.myNameBox>text {
+  color: #424242;
+  font-size: 36rpx;
+}
+
+.myNameBox>view {
+  color: #424242;
+  font-size: 36rpx;
+}
+
+.enterEdit {
+  position: absolute;
+  right: 50rpx;
+  top: 80rpx;
+  width: 25rpx;
+  height: 40rpx;
+}
+
+.my-category {
+  background-color: #fff;
+  border-bottom: 1px solid #ebebeb;
+  display: flex;
+  height: 100rpx;
+  flex-direction: row;
+  position: relative;
+  padding: 0 40rpx;
+}
+
+.my-category>text {
+  font-size: 30rpx;
+  line-height: 100rpx;
+  color: #424242;
+}
+
+.enterArrow {
+  width: 25rpx;
+  height: 40rpx;
+  position: absolute;
+  right: 50rpx;
+  top: 30rpx;
+}
+
+.input {
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 30rpx;
+  color: #424242;
+}
+
+.pickerBox>text {
+  width: 90rpx;
+}
+
+.pickerBox>.picker {
+  width: 540rpx;
+  overflow: hidden;
+}
+
+.pickerView {
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 30rpx;
+  color: #424242;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saveBtn {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  position: fixed;
+  bottom: 0;
+  background-color: #19a2ff;
+  display: flex;
+  justify-content: center;
+}
+
+.saveBtn>text {
+  font-size: 30rpx;
+  color: #fff;
+}

@@ -1,0 +1,23 @@
+.description-container{
+  padding-bottom: 100rpx;
+}
+
+.description-container>image {
+  width: 100%;
+}
+
+.purchaseBtn {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  position: fixed;
+  bottom: 0;
+  background-color: #19a2ff;
+  display: flex;
+  justify-content: center;
+}
+
+.purchaseBtn>text {
+  font-size: 30rpx;
+  color: #fff;
+}

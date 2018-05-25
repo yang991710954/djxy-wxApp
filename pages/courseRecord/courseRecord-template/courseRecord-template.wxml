@@ -1,0 +1,10 @@
+<template name='courseRecordTemplate'>
+  <view class='record-container'>
+    <text>2018-03-26 10:32</text>
+    <text>购买：滴驾只能评判课程</text>
+    <view class='recordTime'>
+      <text>购买时间：1小时</text>
+      <text>￥25.0</text>
+    </view>
+  </view>
+</template>

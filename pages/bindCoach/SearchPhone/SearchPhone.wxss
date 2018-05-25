@@ -1,0 +1,101 @@
+.searchPhone-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60rpx;
+}
+
+.inputBox {
+  width: 620rpx;
+  height: 110rpx;
+  margin-bottom: 30rpx;
+  line-height: 110rpx;
+  text-align: center;
+  border-radius: 55rpx;
+  border: 1px solid #ebebeb;
+}
+
+.weui-input {
+  height: 110rpx;
+  min-height: 110rpx;
+  line-height: 110rpx;
+}
+
+.searchBtn {
+  width: 620rpx;
+  height: 110rpx;
+  margin-bottom: 30rpx;
+  line-height: 110rpx;
+  text-align: center;
+  border-radius: 55rpx;
+  background-color: #19a2ff;
+  position: relative;
+}
+
+.searchBtn>text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.searchBtn>.whiteArrow {
+  position: absolute;
+  right: 40rpx;
+  top: 40rpx;
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.coachInfo {
+  margin: 60rpx auto;
+  width: 400rpx;
+  height: 400rpx;
+  text-align: center;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+  border-radius: 15rpx;
+  border: 1px solid #ebeef5;
+  box-shadow: 0 2rpx 10rpx 0 rgba(0, 0, 0, 0.1);
+}
+
+.coachImg {
+  width: 400rpx;
+  height: 300rpx;
+  display: block;
+}
+
+.coachName {
+  display: inline-block;
+  width: 280rpx;
+  margin-top: 28rpx;
+  font-size: 34rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coachJump {
+  width: 34rpx;
+  height: 34rpx;
+  position: absolute;
+  right: 30rpx;
+  bottom: 30rpx;
+}
+
+.noData-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nodataImg {
+  height: 280rpx;
+  margin-top: 100rpx;
+  margin-bottom: 60rpx;
+}
+
+.noData-container>text {
+  font-size: 30rpx;
+  color: #999999;
+}

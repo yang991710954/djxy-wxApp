@@ -1,0 +1,22 @@
+<!--index.wxml-->
+<view class="myInfo-container">
+  <view class='myInfoBox' bindtap='jumpEidtUser'>
+    <view class='myImgBox'>
+      <!-- <image src='/images/userImg.jpg'></image> -->
+      <view class='userImgBox'>
+        <open-data class='userImg' type="userAvatarUrl"></open-data>
+      </view>
+    </view>
+    <view class='myNameBox'>
+      <text>学员：张敏</text>
+    </view>
+    <image class='enterEdit' src='/images/enterArrow.png'></image>
+  </view>
+
+  <image class='serviceBanner' src='/images/service.png'></image>
+
+  <view class='recordBox' bindtap='jumpPurchaseRecords'>
+    <text>课程购买记录</text>
+    <image class='enterEdit' src='/images/enterArrow.png'></image>
+  </view>
+</view>

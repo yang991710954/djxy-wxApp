@@ -1,0 +1,52 @@
+<import src="./record-template/record-template.wxml" />
+<import src="/pages/blankPage/blankPage-template.wxml" />
+
+<view>
+  <view wx:if='{{true}}'>
+    <view class='studentInfo'>
+      <view class='studentImgBox'>
+        <image class='studentImg' src='/images/userImg.jpg'></image>
+      </view>
+      <view class='nameGradeBox'>
+        <text>学员：<text>张敏</text></text>
+        <text>平均分数：<text class='grade'>78分</text></text>
+      </view>
+    </view>
+
+    <view class='timePicker-group'>
+      <view class="section">
+        <picker mode="date" value="{{startDate}}" start="2015-09-01" end="2019-09-01" bindchange="bindStartDateChange">
+          <view class="picker">
+            起始时间:
+            <text>{{startDate}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="section">
+        <picker mode="date" value="{{endDate}}" start="2015-09-01" end="2019-09-01" bindchange="bindEndDateChange">
+          <view class="picker">
+            结束时间:
+            <text>{{endDate}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class='filtrateBtnBox'>
+        <text class='filtrateBtn'>筛 选</text>
+      </view>
+    </view>
+
+    <block>
+      <template is='recordTemplate' />
+      <template is='recordTemplate' />
+      <template is='recordTemplate' />
+      <template is='recordTemplate' />
+      <template is='recordTemplate' />
+    </block>
+
+  </view>
+  <view wx:else>
+    <template is='blankTemplate' />
+  </view>
+</view>

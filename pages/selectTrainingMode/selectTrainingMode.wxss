@@ -1,0 +1,43 @@
+.selectModel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Microsoft YaHei";
+}
+
+.modelBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 50rpx;
+}
+
+.modeItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.modeItem>.modelImg {
+  width: 300rpx;
+  height: 200rpx;
+  margin: 30rpx;
+}
+
+.modelMark>text {
+  display: block;
+  font-size: 24rpx;
+  color: #8294a5;
+}
+
+.modelMark>text:nth-child(1) {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  color: #4b4b53;
+}
+
+.practiceBox {
+  margin-top: 40rpx;
+}

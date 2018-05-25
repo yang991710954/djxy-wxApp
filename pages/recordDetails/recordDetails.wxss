@@ -1,0 +1,48 @@
+@import './recordDetail-template/recordDetail-template.wxss';
+
+page {
+  background-color: #f5f5f5;
+}
+
+.statistic-container {
+  background-color: #fff;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: row;
+  font-size: 26rpx;
+  color: #424242;
+  margin-bottom: 10rpx;
+}
+
+.statistic-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+}
+
+.statistic-item:nth-child(2) {
+  margin-top: 12rpx;
+}
+
+.itemBox {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.performance {
+  font-size: 30rpx;
+  color: #19a2ff;
+}
+
+.statistic-titleBox{
+  background-color: #f4fbff;
+  height: 60rpx;
+  padding-left: 30rpx;
+}
+
+.statistic-titleBox>text{
+  font-size: 30rpx;
+  line-height: 60rpx;
+}

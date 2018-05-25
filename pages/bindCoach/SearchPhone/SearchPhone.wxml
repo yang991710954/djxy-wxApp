@@ -1,0 +1,30 @@
+<!-- 通过手机号搜索 -->
+<view class='searchPhone-container'>
+  <view class="inputBox">
+    <input class="weui-input" type="number" auto-focus maxlength="11" bindinput='bindHideKeyboard' placeholder="请输入教练手机号码" />
+  </view>
+
+
+  <view class='searchBtn' bindtap='jumpPhoneSearch'>
+    <text>搜索</text>
+    <image class="whiteArrow" src='/images/whiteArrow.png'></image>
+  </view>
+</view>
+
+<view class="coach-container">
+  <!-- 教练信息 -->
+  <view wx:if="{{true}}" class="coachInfo" bindtap='bindCoachFormPhone'>
+    <image class='coachImg' src='/images/userImg.jpg'></image>
+    <view>
+      <text class="coachName">{{15814485235}}</text>
+      <image class="coachJump" src='/images/jump.png'></image>
+    </view>
+  </view>
+
+  <!-- 未搜索到教练信息 -->
+  <view wx:else class='noData-container'>
+    <image class='nodataImg' mode='aspectFit' src='/images/no-data.png'></image>
+    <text>抱歉！没有找到你查找的号码</text>
+    <text>请检查查找号码是否有误</text>
+  </view>
+</view>

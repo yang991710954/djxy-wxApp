@@ -1,0 +1,16 @@
+<import src="./courseRecord-template/courseRecord-template.wxml" />
+
+<view>
+  <view wx:if='{{true}}'>
+    <template is='courseRecordTemplate' />
+    <template is='courseRecordTemplate' />
+    <template is='courseRecordTemplate' />
+    <template is='courseRecordTemplate' />
+    <template is='courseRecordTemplate' />
+    <template is='courseRecordTemplate' />
+    <template is='courseRecordTemplate' />
+  </view>
+  <view wx:else>
+    <template is='blankTemplate' />
+  </view>
+</view>

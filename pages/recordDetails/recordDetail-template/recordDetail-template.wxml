@@ -1,0 +1,12 @@
+<template name='recordDetailTemplate'>
+  <view class='detail-container'>
+    <view class='deductionBox'>
+      <text>扣分项目：<text>起步</text></text>
+      <text>扣分分数：<text>-10</text></text>
+    </view>
+
+    <view class='contentBox'>
+      <text>扣分内容：<text>起步、转向、变更车道、超车、停车前不能正确使用转向灯（30203）</text></text>
+    </view>
+  </view>
+</template>

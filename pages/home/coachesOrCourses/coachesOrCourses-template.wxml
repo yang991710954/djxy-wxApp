@@ -1,0 +1,39 @@
+<template name="coachesOrCourses">
+  <view class="couchesCourses-container">
+    <!-- 教练信息 -->
+    <view class="coachInfo" bindtap='jumpCoachCard'>
+      <view class='coachImgBox'>
+         <image class='coachImg' src='/images/userImg.jpg'></image> 
+      </view>
+      <view class='coachBox'>
+        <text class="coachName">{{coachName}}</text>
+        <image class="coachJump" src='/images/jump.png'></image>
+      </view>
+    </view>
+
+    <!-- 课程信息 -->
+    <view class="coursesInfo">
+      <view class="courseTitle-container">
+        <text class="courseTitle">智能评判课程</text>
+        <view class="courseTimeBox">
+          <text class="courseTimeLabel">到期：</text>
+          <text class="courseTime">2018年4月28号</text>
+        </view>
+      </view>
+      <view class="categoryBox">
+        <view class="category">
+          <text>累计时间</text>
+          <text>120分钟</text>
+        </view>
+        <view class="category">
+          <text>已用时间</text>
+          <text>80分钟</text>
+        </view>
+        <view class="category">
+          <text>剩余时间</text>
+          <text>40分钟</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

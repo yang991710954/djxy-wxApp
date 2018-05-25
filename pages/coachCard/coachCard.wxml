@@ -1,0 +1,38 @@
+<view class='businessCard-container'>
+  <!-- 教练名片 -->
+  <view class='businessCard'>
+    <view class='coachInfo-container'>
+      <view class='coachImgBox'>
+        <image class='coachImg' src='/images/userImg.jpg'></image>
+      </view>
+
+      <view class='coachStatusBox'>
+        <view class='coachStatus'>
+          <view class='coachName'>
+            <text>张教练</text>
+          </view>
+
+          <view class='schoolAge'>
+            <text>教龄10年</text>
+          </view>
+        </view>
+
+        <text class='drivingSchool'>湘麓驾校</text>
+      </view>
+    </view>
+    <view class='qr-container'>
+      <image src='/images/qr.png'></image>
+    </view>
+  </view>
+  <!-- 按钮 -->
+  <view class='searchMode'>
+    <view class='searchModeItem unBindCoach' bindtap='unBindCoach'>
+      <text>解绑教练</text>
+    </view>
+
+    <view class='searchModeItem'>
+      <text>联系客服</text>
+      <image class="whiteArrow" src='/images/whiteArrow.png'></image>
+    </view>
+  </view>
+</view>

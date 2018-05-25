@@ -1,0 +1,40 @@
+<view class='course-container'>
+  <view class='courseMapBox'>
+    <view class='courseMap'>
+      <image src='/images/userImg.jpg'></image>
+    </view>
+    <view class='course-introduceBox'>
+      <text class='course-title'>智能硬件科目三路考仪-智能硬件科目三路考仪</text>
+      <text class='annotation'>课程介绍:</text>
+      <view class='course-introduce'>可将导航栏固定在左侧，提高导航可见性，方便页面之间切换；顶部可放置常用工具，如搜索条、帮助按钮、通知按钮等。适用于中后台的管理型、工具型网站。</view>
+    </view>
+  </view>
+
+  <view class='inputNumberBox'>
+    <view class='priceCourse'>
+      <view class='priceCourseTip'>课程价格:</view>
+      <view class='units'>{{coursePrice}} 元/小时</view>
+    </view>
+
+    <view class='priceCourse'>
+      <view class='priceCourseTip' style='margin-top:10rpx;'>购买数量:</view>
+      <view class='quantityBox'>
+        <view class='quantity'>
+          <text id='plus' bindtap='Degression'>-</text>
+          <input id='iptnum' bindblur='changeIptnum' type='number' maxlength="3" auto-focus value='{{purchaseQuantity}}'></input>
+          <text id='minus' bindtap='Ascending'>+</text>
+        </view>
+        <view class='units'>小时</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class='description-container'>
+  <image src='/images/testImg/test1.jpeg'></image>
+  <image src='/images/testImg/test1.jpeg'></image>
+</view>
+
+<view class='purchaseBtn' bindtap='getPurchaseNow'>
+  <text>合计: ￥{{purchaseQuantity*coursePrice}} 立即购买</text>
+</view>

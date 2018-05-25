@@ -1,0 +1,85 @@
+@import './record-template/record-template.wxss';
+@import '/pages/blankPage/blankPage-template.wxss';
+
+.studentInfo {
+  height: 200rpx;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+}
+
+.studentImgBox {
+  width: 140rpx;
+  height: 140rpx;
+  margin-top: 30rpx;
+  margin-left: 40rpx;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 1px solid #ebeef5;
+}
+
+.studentImg {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 1px solid #ebeef5;
+  box-shadow: 0 2rpx 10rpx 0 rgba(0, 0, 0, 0.1);
+}
+
+.nameGradeBox {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20rpx;
+  padding-left: 40rpx;
+}
+
+.nameGradeBox text {
+  font-size: 32rpx;
+  color: #424242;
+  margin-top: 25rpx;
+}
+
+.nameGradeBox .grade {
+  color: #19a2ff;
+}
+
+.timePicker-group {
+  padding: 10rpx 20rpx;
+  background-color: #fff;
+  position: relative;
+  border-bottom: 1px solid #ebebeb;
+  box-shadow: 0 1rpx 5rpx 0 rgba(0, 0, 0, 0.1);
+}
+
+.picker {
+  font-size: 30rpx;
+  padding: 10rpx;
+  color: #666;
+}
+
+.picker>text {
+  font-size: 30rpx;
+  color: #19a2ff;
+}
+
+.filtrateBtnBox {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  text-align: center;
+  padding-top: 50rpx;
+}
+
+.filtrateBtn {
+  height: 100%;
+  font-size: 30rpx;
+  color: #fff;
+  padding: 15rpx 40rpx;
+  background-color: #19a2ff;
+  border-radius: 10rpx;
+}
