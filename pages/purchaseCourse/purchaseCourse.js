@@ -1,39 +1,54 @@
 // pages/purchaseCourse/purchaseCourse.js
+import {
+  APIHOST,
+  httpRequest
+} from '../../utils/util.js';
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+  
   },
 
   jumpPage: function () {
-    let num = Math.random() * 10;
-    if (num >= 5) {
-      wx.navigateTo({
-        url: '/pages/purchaseCourse/purchaseNow/purchaseNow',
-      })
-      return;
-    }
+    // 查询绑定教练
+    httpRequest({
+      url: APIHOST + '/api/base/s_stu_info_api/load_bind',
+      success: function ({ data }) {
+        if (!data.result) {
 
-    wx.showModal({
-      title: '温馨提示',
-      content: '请先绑定教练才能购买课程哦',
-      success: function (res) {
-        if (res.confirm) {
-          console.log('用户点击确定')
-
-          wx.navigateTo({
-            url: '/pages/bindCoach/bindCoach',
+          wx.showModal({
+            title: '温馨提示',
+            content: '请先绑定教练才能购买课程哦',
+            success: function (res) {
+              if (res.confirm) {
+                wx.navigateTo({
+                  url: '/pages/bindCoach/bindCoach',
+                })
+              } else if (res.cancel) {
+                wx.switchTab({
+                  url: '/pages/home/home',
+                })
+              }
+            }
           })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
 
-          // wx.switchTab({
-          //   url: '/pages/home/home',
-          // })
+        } else {
+          wx.navigateTo({
+            url: '/pages/purchaseCourse/purchaseNow/purchaseNow',
+          })
         }
+      },
+      error: function () {
+        wx.showToast({
+          title: '获取教练信息失败',
+          icon: 'none',
+          image: '/images/exclamation.png',
+          duration: 2000
+        })
       }
     })
   },

@@ -143,8 +143,8 @@ Page({
                     function UnbundlingRelationship() {
                       //询问框
                       wx.showModal({
-                        title: '温馨提示提示',
-                        content: '您需要先解除 <strong>' + coachName + '</strong> 教练的绑定才能进行后续操作,是否现在解除 <strong>' + coachName + '</strong> 教练的绑定（解除绑定后之前购买的课程也会失效）',
+                        title: '温馨提示',
+                        content: '您需要先解除 ' + coachName + ' 教练的绑定才能进行后续操作（解除绑定后之前购买的课程也会失效）',
                         confirmText: '现在绑定',
                         success: function (res) {
                           if (res.confirm) {
@@ -162,7 +162,7 @@ Page({
 
                                         //do something 业务逻辑
                                         wx.showToast({
-                                          title: '重新绑定教练',
+                                          title: '绑定教练成功',
                                           icon: 'success',
                                           duration: 2000
                                         })
@@ -215,10 +215,8 @@ Page({
                       } else {
 
                         //do something 业务逻辑
-                        wx.showToast({
-                          title: '同一教练无体验券',
-                          icon: 'success',
-                          duration: 2000
+                        wx.navigateTo({//去购买课程
+                          url: '/pages/purchaseCourse/purchaseCourse',
                         })
 
                         // //去购买课程

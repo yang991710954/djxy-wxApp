@@ -21,7 +21,7 @@
       <view class='quantityBox'>
         <view class='quantity'>
           <text id='plus' bindtap='Degression'>-</text>
-          <input id='iptnum' bindblur='changeIptnum' type='number' maxlength="3" auto-focus value='{{purchaseQuantity}}'></input>
+          <input id='iptnum' bindblur='changeIptnum' type='number' maxlength="3" value='{{purchaseQuantity}}'></input>
           <text id='minus' bindtap='Ascending'>+</text>
         </view>
         <view class='units'>小时</view>

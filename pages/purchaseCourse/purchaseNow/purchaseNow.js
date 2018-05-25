@@ -1,4 +1,13 @@
 // pages/purchaseCourse/purchaseNow/purchaseNow.js
+import {
+  APIHOST,
+  phoneReg,
+  httpRequest,
+  returnUrlObj,
+  returnUrlParam,
+  wxCloseAppOnError
+} from '../../../utils/util.js';
+
 Page({
 
   /**
@@ -10,16 +19,120 @@ Page({
   },
 
   getPurchaseNow: function () {
-    wx.showToast({
-      title: '购买课程成功',
-      icon: 'success',
-      duration: 2000
+    let params = {
+      commodityType: 1, 
+      pageNum: 1, 
+      pageSize: 0
+    }
+    //获取课程信息列表
+    httpRequest({
+      url: APIHOST + 'api/order/commodity_api/commodity_list',
+      contentType: 'application/x-www-form-urlencoded',
+      method: 'post',
+      data: params,
+      success: function ({ data }) {
+        let courseMessage = data.result.list;
+        let commodityId = courseMessage[0].id;
+
+        // 获取课程信息
+        httpRequest({
+          url: APIHOST + '/api/base/commodity_api/commodity_detail',
+          contentType: 'application/x-www-form-urlencoded',
+          data: { commodityId: commodityId },
+          success: function ({ data }) {
+            if (!data.error) {
+              let createorder = {
+                skuId: skuId,
+                skuNum: skuNum
+              }
+              //生成订单
+              httpRequest({
+                url: APIHOST + '/api/base/order_info_api/save_student_use_order',
+                data: JSON.stringify(createorder),
+                success: function ({ data }) {
+                  if (!data.error) {
+                    let orderId = data.result[0].orderId;
+                    let confirmpayment = {
+                          orderFrom: "APP_PAY",
+                          orderNo: orderId,
+                          orderIp: localId,
+                          payWayCode: payWayCode,
+                          returnUrl: "/api/order/swagger-ui.html",
+                          userId: student_userId,
+                          appid: appid
+                        };
+
+                    //获取微信签名
+                    httpRequest({
+                      url: APIHOST + '/api/base/order_info_api/pay_in_order',
+                      data: JSON.stringify(confirmpayment),
+                      success: function ({ data }) {
+                        if (!data.error) {
+
+                          // 调微信支付
+                          wx.requestPayment({
+                            'timeStamp': '',
+                            'nonceStr': '',
+                            'package': '',
+                            'signType': 'MD5',
+                            'paySign': '',
+                            'success': function (res) {
+                              console.log(res)
+                              wx.showToast({
+                                title: '购买课程成功',
+                                icon: 'success',
+                                duration: 2000
+                              })
+                              setTimeout(function () {
+                                wx.switchTab({
+                                  url: '/pages/home/home',
+                                })
+                              }, 1000)
+                            },
+                            'fail': function (res) {
+                              console.log(res)
+                              wx.showToast({
+                                title: '购买课程成功失败',
+                                icon: 'none',
+                                image: '/images/exclamation.png',
+                                duration: 2000
+                              })
+                            },
+                            'complete': function (res) {
+                              console.log(res)
+                            }
+                          })
+
+                        } else {
+                          wxCloseAppOnError('获取微信签名失败')
+                        }
+                      },
+                      error: function () {
+                        wxCloseAppOnError('获取微信签名出错')
+                      }
+                    })
+
+                  }else{
+                    wxCloseAppOnError('生成订单失败')
+                  }
+                },
+                error: function () {
+                  wxCloseAppOnError('生成订单出错')
+                }
+              })
+
+            }
+          },
+          error: function () {
+            wxCloseAppOnError('获取课程信息失败')
+          }
+        })
+
+      },
+      error: function () {
+        wxCloseAppOnError('获取课程信息列表失败')
+      }
     })
-    setTimeout(function () {
-      wx.switchTab({
-        url: '/pages/home/home',
-      })
-    }, 1000)
   },
 
   changeIptnum: function (e) {
