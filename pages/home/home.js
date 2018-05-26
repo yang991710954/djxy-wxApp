@@ -53,6 +53,22 @@ Page({
     })
   },
 
+  getStudentInfo: function () {
+    httpRequest({
+      url: APIHOST + '/api/base/user/info',
+      success: function ({ data }) {
+        if (data.result) {
+          wx.setStorageSync('USER_INFO', JSON.stringify(data.result));
+        } else {
+          wxCloseAppOnError('获取信息失败')
+        }
+      },
+      error: function () {
+        wxCloseAppOnError('获取信息出错')
+      }
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -63,6 +79,7 @@ Page({
     console.log(scene);
     console.log(query);
 
+    let _this = this;
     // 登录
     wx.login({
       success: res => {
@@ -93,6 +110,8 @@ Page({
               //1.2获取token并缓存起来
               if (resObj.accessToken) {
                 wx.setStorageSync('SESSION_KEY', resObj.accessToken);
+                // 获取学员信息
+                _this.getStudentInfo();
               } else {
                 wx.showToast({
                   title: '获取token失败',

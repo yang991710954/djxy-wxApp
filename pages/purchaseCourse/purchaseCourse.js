@@ -1,7 +1,8 @@
 // pages/purchaseCourse/purchaseCourse.js
 import {
   APIHOST,
-  httpRequest
+  httpRequest,
+  imgList
 } from '../../utils/util.js';
 
 Page({
@@ -10,7 +11,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    imgList: imgList,//课程图片集
   },
 
   jumpPage: function () {
@@ -57,7 +58,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    wx.showLoading({
+      title: '加载中',
+    })
   },
 
   /**
@@ -71,7 +74,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    wx.hideLoading();
   },
 
   /**

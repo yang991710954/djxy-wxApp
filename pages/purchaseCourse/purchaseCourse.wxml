@@ -1,7 +1,7 @@
 <view class='description-container'>
-  <image src='/images/testImg/test1.jpeg'></image>
-  <image src='/images/testImg/test1.jpeg'></image>
-  <image src='/images/testImg/test1.jpeg'></image>
+  <block wx:for="{{imgList}}" wx:key='{{index}}'>
+    <image mode='widthFix' src='{{item}}'></image>
+  </block>
 </view>
 <view class='purchaseBtn' bindtap='jumpPage'>
   <text>马上购买课程</text>

@@ -83,7 +83,7 @@ const returnUrlParam = function (dataObj) {
 }
 
 //小程序错误提示
-const wxCloseAppOnError = function (content){
+const wxCloseAppOnError = function (content) {
   wx.showModal({
     title: '温馨提示',
     content: content,
@@ -98,19 +98,47 @@ const wxCloseAppOnError = function (content){
   })
 }
 
+//通用失败提示信息
+const showMessage = function (content) {
+  wx.showToast({
+    title: content,
+    icon: 'none',
+    image: '/images/exclamation.png',
+    duration: 2000
+  })
+}
+
 // 小程序appid
 const APP_ID = 'wx4bd4f904b42bd0a6';
 // 小程序app_secret
 const APP_SECRET = '694877cd3bc3f037b7a0ed443dfbc8f4';
+//服务器Ip
+const LOCAL_ID = '192.168.1.7';
+
 
 // 环境配置
 const APIHOST = "https://dev.yirenzn.com/"; // test
 // const APIHOST = "https://pre.yirenzn.com/"; // stage
 // const APIHOST = "https://api.dj23.cn/"; // production
 
+// 课程图片地址
+const COURSES_IMGURL_01 = 'http://dj-static.oss-cn-shenzhen.aliyuncs.com/commodity/image/intelligence_course_01.png'
+const COURSES_IMGURL_02 = 'http://dj-static.oss-cn-shenzhen.aliyuncs.com/commodity/image/intelligence_course_02.png'
+const COURSES_IMGURL_03 = 'http://dj-static.oss-cn-shenzhen.aliyuncs.com/commodity/image/intelligence_course_03.png'
+
+
 // 模块导出
 module.exports = {
   APIHOST,
+  LOCAL_ID,
+  APP_ID,
+  APP_SECRET,
+  showMessage,
+  imgList: [
+    COURSES_IMGURL_01,
+    COURSES_IMGURL_02,
+    COURSES_IMGURL_03
+  ],
   phoneReg,
   formatTime,
   httpRequest,

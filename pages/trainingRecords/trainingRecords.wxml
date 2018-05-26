@@ -5,7 +5,10 @@
   <view wx:if='{{true}}'>
     <view class='studentInfo'>
       <view class='studentImgBox'>
-        <image class='studentImg' src='/images/userImg.jpg'></image>
+        <!-- <image class='studentImg' src='/images/userImg.jpg'></image> -->
+        <view class='userImgBox'>
+          <open-data class='userImg' type="userAvatarUrl"></open-data>
+        </view>
       </view>
       <view class='nameGradeBox'>
         <text>学员：<text>张敏</text></text>

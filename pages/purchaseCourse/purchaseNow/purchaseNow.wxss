@@ -157,6 +157,7 @@ page {
 
 .description-container>image {
   width: 100%;
+  display:block;
 }
 
 .purchaseBtn {

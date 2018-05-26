@@ -1,12 +1,12 @@
 <view class='course-container'>
   <view class='courseMapBox'>
     <view class='courseMap'>
-      <image src='/images/userImg.jpg'></image>
+      <image src='{{courseDescription.imgUrl}}'></image>
     </view>
     <view class='course-introduceBox'>
-      <text class='course-title'>智能硬件科目三路考仪-智能硬件科目三路考仪</text>
+      <text class='course-title'>{{courseDescription.title}}</text>
       <text class='annotation'>课程介绍:</text>
-      <view class='course-introduce'>可将导航栏固定在左侧，提高导航可见性，方便页面之间切换；顶部可放置常用工具，如搜索条、帮助按钮、通知按钮等。适用于中后台的管理型、工具型网站。</view>
+      <view class='course-introduce'>{{courseDescription.Descraption}}</view>
     </view>
   </view>
 
@@ -31,8 +31,9 @@
 </view>
 
 <view class='description-container'>
-  <image src='/images/testImg/test1.jpeg'></image>
-  <image src='/images/testImg/test1.jpeg'></image>
+  <block wx:for="{{imgList}}" wx:key='{{index}}'>
+    <image mode='widthFix' src='{{item}}'></image>
+  </block>
 </view>
 
 <view class='purchaseBtn' bindtap='getPurchaseNow'>
