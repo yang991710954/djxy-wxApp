@@ -15,6 +15,42 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+// 计算剩余时间
+const getRemainingTime = time =>{
+  if (!time) {
+    return '';
+  }
+
+  var Atime = new Date(time.replace(/-/g, '/')).getTime();
+  var now = Date.now();
+
+  if (Atime > now) {
+    var diff = Math.abs(now / 1000 - Atime / 1000);
+  } else {
+    return 'timeOver';
+  }
+
+  var hms = diff % 86400;
+  var days = (diff - hms) / 86400;
+  var ms = hms % 3600;
+  var hours = (hms - ms) / 3600;
+  var seconds = ms % 60;
+  var miniutes = (ms - seconds) / 60;
+
+  var s = '';
+  if (days > 0) {
+    s += days + '天';
+  }
+  if (hours > 0) {
+    s += hours + '小时';
+  }
+  if (miniutes > 0) {
+    s += miniutes + '分钟';
+  }
+  s += seconds.toFixed(0) + '秒';
+  return s;
+}
+
 // 手机号正则
 const phoneReg = /^1(3|4|5|6|7|8|9)\d{9}$/;
 
@@ -108,6 +144,13 @@ const showMessage = function (content) {
   })
 }
 
+// 关闭小程序
+const wxCloseApp = function () {
+  wx.navigateBack({
+    delta: 0
+  })
+}
+
 // 小程序appid
 const APP_ID = 'wx4bd4f904b42bd0a6';
 // 小程序app_secret
@@ -133,6 +176,7 @@ module.exports = {
   LOCAL_ID,
   APP_ID,
   APP_SECRET,
+  wxCloseApp,
   showMessage,
   imgList: [
     COURSES_IMGURL_01,
@@ -144,5 +188,6 @@ module.exports = {
   httpRequest,
   returnUrlObj,
   returnUrlParam,
+  getRemainingTime,
   wxCloseAppOnError
 }

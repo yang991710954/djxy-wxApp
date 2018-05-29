@@ -1,6 +1,7 @@
 import {
   APIHOST,
   phoneReg,
+  showMessage,
   httpRequest,
   returnUrlObj,
   returnUrlParam,
@@ -12,10 +13,21 @@ Page({
    * 页面的初始数据
    */
   data: {
-    coachName: '张教练代发恐龙当家',
-    mileageNum: '100'
+    coachName: '',
+    mileageNum: '100',
+    isBindCoach: false,
+    courseInfo: {},
+    practiceStatistics:{
+      qualified: 0, //合格率,1为100%
+      totalDistance: 0, //总里程
+      totalTime: 0, //总时间
+      totalTravel: 0, //总次数
+      trainTravel: 0, //训练次数
+      examTravel: 0, //考试次数
+    }
   },
 
+  // 扫码练车
   onScanQR: function () {
     wx.scanCode({
       success: (res) => {
@@ -29,56 +41,135 @@ Page({
     })
   },
 
+  // 跳转到绑定教练页
   onBindCoach: function () {
     wx.navigateTo({
       url: '/pages/bindCoach/bindCoach',
     })
   },
 
+  // 跳转到练车记录页
   lookAllTrainRecords: function () {
     wx.navigateTo({
       url: '/pages/trainingRecords/trainingRecords',
     })
   },
 
+  // 跳转到教练详情页
   jumpCoachCard: function () {
     wx.navigateTo({
       url: '/pages/coachCard/coachCard',
     })
   },
 
+  // 跳转到购买课程
   jumpPurchaseCourse: function () {
     wx.navigateTo({
       url: '/pages/purchaseCourse/purchaseCourse',
     })
   },
 
-  getStudentInfo: function () {
+
+  // 阿里OSS 获取头像
+  aliOss: function () {
     httpRequest({
-      url: APIHOST + '/api/base/user/info',
+      url: APIHOST + 'api/base/user/sts/bucketname_userid_r_files',
       success: function ({ data }) {
         if (data.result) {
-          wx.setStorageSync('USER_INFO', JSON.stringify(data.result));
-        } else {
-          wxCloseAppOnError('获取信息失败')
+          console.log(data)
         }
-      },
-      error: function () {
-        wxCloseAppOnError('获取信息出错')
       }
     })
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
-    var scene = decodeURIComponent(options.scene)
-    var query = options.query // 3736
-    console.log(scene);
-    console.log(query);
+  // 保存课程信息
+  saveVourseInfo: function (obj){
+    this.setData({
+      courseInfo: {
+        title: obj.packagesName || '暂无可用课程',
+        expiryDate: obj.expiryDate.slice(0,10) || '无',
+        remainingTime: obj.remainingTime || 0,
+        timeAll: obj.timeAll || 0,
+      }
+    })
 
+    console.log(this.data.courseInfo)
+  },
+
+  // 获取学员练车统计
+  getDrivingStatistics: function(){
+    let _this = this;
+    httpRequest({
+      url: APIHOST + 'api/v3/driving/collection/stu_driving_statistics',
+      success: function ({ data }) {
+        let dataObj = data.result;
+
+        if(dataObj){
+          _this.setData({
+            practiceStatistics: {
+              qualified: dataObj.qualified ? dataObj.qualified * 100: 0, //合格率,1为100%
+              totalDistance: dataObj.totalDistance ? (dataObj.totalDistance / 1000).toFixed(2) : 0, //总里程
+              totalTime: dataObj.totalTime || 0, //总时间
+              totalTravel: dataObj.totalTravel || 0, //总次数
+              trainTravel: dataObj.trainTravel || 0, //训练次数
+              examTravel: dataObj.examTravel || 0, //考试次数
+            }
+          })
+        }
+      },
+      error: function () {
+        showMessage('获取信息出错')
+      }
+    })
+  },
+
+  // 获取本人信息
+  getStudentInfo: function () {
+    httpRequest({
+      url: APIHOST + '/api/base/user/info',
+      success: function ({ data }) {
+        let dataObj = data.result;
+
+        if (dataObj && dataObj.id) {
+          wx.setStorageSync('USER_INFO', JSON.stringify(dataObj));
+        } else {
+          showMessage('获取信息失败')
+        }
+      },
+      error: function () {
+        showMessage('获取信息出错')
+      }
+    })
+  },
+
+  // 获取绑定获取教练信息
+  getCocahInfo: function () {
+    let _this = this;
+    httpRequest({
+      url: APIHOST + 'api/base/s_stu_info_api/load_bind',
+      success: function ({ data }) {
+        let dataObj = data.result;
+
+        if (dataObj && dataObj.userId) {
+
+          _this.setData({
+            isBindCoach: true,
+            coachName: dataObj.name
+          })
+
+          wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
+        } else {
+          showMessage('获取信息失败')
+        }
+      },
+      error: function () {
+        showMessage('获取信息出错')
+      }
+    })
+  },
+
+  // 初始化首页显示
+  initHome: function () {
     let _this = this;
     // 登录
     wx.login({
@@ -86,6 +177,7 @@ Page({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         wx.setStorageSync('CODE', res.code);
         httpRequest({
+          loading: true,
           url: APIHOST + 'api/base/binding_checking_api/f/binding_checking_stu_min_app',
           contentType: 'application/x-www-form-urlencoded',
           method: 'post',
@@ -110,8 +202,19 @@ Page({
               //1.2获取token并缓存起来
               if (resObj.accessToken) {
                 wx.setStorageSync('SESSION_KEY', resObj.accessToken);
+
+                // 阿里OSS 获取头像
+                // this.aliOss();
+
                 // 获取学员信息
                 _this.getStudentInfo();
+
+                // 获取绑定获取教练信息
+                _this.getCocahInfo();
+
+                // 获取学员练车统计
+                _this.getDrivingStatistics();
+
               } else {
                 wx.showToast({
                   title: '获取token失败',
@@ -125,6 +228,9 @@ Page({
               (function serviceLogic() {
                 var coach = resObj.coach;
                 var currentCoach = resObj.newCoach;
+
+                var courseInfo = resObj.hasCourse;
+                var voucherInfo = resObj.hasVoucher;
 
                 if (coach) {
                   var coachId = coach.userId;
@@ -146,6 +252,9 @@ Page({
                           duration: 2000
                         })
 
+                        // 保存课程信息
+                        _this.saveVourseInfo(voucherInfo); 
+
                         // if (state === 'from_wxgzh') {
                         //   wx.redirectTo({
                         //     url: '/pages/purchaseCourse/purchaseCourse',
@@ -154,6 +263,10 @@ Page({
                         // }
 
                       }
+
+                      // 保存课程信息
+                      _this.saveVourseInfo(courseInfo); 
+
                       // 重新绑定关系
                       UnbundlingRelationship();
                     }
@@ -180,6 +293,8 @@ Page({
                                       if (data.result) {
 
                                         //do something 业务逻辑
+                                        _this.getCocahInfo(); // 获取绑定获取教练信息
+
                                         wx.showToast({
                                           title: '绑定教练成功',
                                           icon: 'success',
@@ -227,6 +342,9 @@ Page({
                           duration: 2000
                         })
 
+                        // 保存课程信息
+                        _this.saveVourseInfo(voucherInfo); 
+
                         // if (state === 'from_wxgzh') {
                         //   location.replace('./purchasedcourses.html');
                         //   return;
@@ -235,7 +353,7 @@ Page({
 
                         //do something 业务逻辑
                         wx.navigateTo({//去购买课程
-                          url: '/pages/purchaseCourse/purchaseCourse',
+                          url: '/pages/selectTrainingMode/selectTrainingMode',
                         })
 
                         // //去购买课程
@@ -253,6 +371,9 @@ Page({
                         icon: 'success',
                         duration: 2000
                       })
+
+                      // 保存课程信息
+                      _this.saveVourseInfo(courseInfo); 
 
                       // //有课程绑定教练和跳转练车
                       // location.replace('./purchasedcourses.html');
@@ -272,6 +393,8 @@ Page({
                       if (data.result) {
 
                         //do something 业务逻辑
+                        _this.getCocahInfo(); // 获取绑定获取教练信息
+
                         wx.showToast({
                           title: '不同教练有体验券',
                           icon: 'success',
@@ -304,6 +427,19 @@ Page({
         })
       }
     })
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
+    var scene = decodeURIComponent(options.scene)
+    var query = options.query // 3736
+    console.log(scene);
+    console.log(query);
+
+    this.initHome();// 初始化首页显示
   },
 
   /**

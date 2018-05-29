@@ -1,4 +1,10 @@
 // pages/selectTrainingMode/selectTrainingMode.js
+import {
+  APIHOST,
+  httpRequest,
+  wxCloseAppOnError
+} from '../../utils/util.js';
+
 Page({
 
   /**
@@ -8,28 +14,66 @@ Page({
 
   },
 
+  // 自动评判
   autoJudge: function () {
-    wx.navigateTo({
-      url: '/pages/purchaseCourse/purchaseCourse',
+    wx.vibrateShort({
+      success: function () {
+        setTimeout(function () {
+          wx.navigateTo({
+            url: '/pages/purchaseCourse/purchaseCourse',
+          })
+        }, 500)
+      }
     })
   },
 
+  // 自动播报
   autoBroadcast: function () {
-    wx.showModal({
-      title: '温馨提示',
-      content: '自动播报练车请求成功，请做好练车准备！',
-      success: function (res) {
-        if (res.confirm) {
-          console.log('用户点击确定')
-
-          wx.switchTab({
-            url: '/pages/home/home',
+    // 发送练车请求
+    httpRequest({
+      url: APIHOST + 'api/v3/driving/driving/student/student_free_apply',
+      contentType: 'application/x-www-form-urlencoded',
+      method: 'post',
+      success: function ({ data }) {
+        if (data.result) {
+          wx.showModal({
+            title: '温馨提示',
+            content: '自动播报练车请求成功，请做好练车准备！',
+            success: function (res) {
+              if (res.confirm) {
+                wx.vibrateShort({
+                  success: function () {
+                    setTimeout(function () {
+                      wx.switchTab({
+                        url: '/pages/home/home',
+                      })
+                    }, 500)
+                  }
+                })
+              }
+            }
           })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
+        } else {
+          wx.showModal({
+            title: '温馨提示',
+            content: '练车请求失败，请返回之后再试一次！',
+            showCancel: false,
+            success: function (res) {
+              if (res.confirm) {
+                wx.switchTab({
+                  url: '/pages/home/home',
+                })
+              }
+            }
+          })
         }
+      },
+      error: function () {
+        wxCloseAppOnError('练车请求失败')
       }
     })
+
+
   },
 
   /**

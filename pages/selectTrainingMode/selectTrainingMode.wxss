@@ -41,3 +41,7 @@
 .practiceBox {
   margin-top: 40rpx;
 }
+
+page{
+  background-color: #ffffff;
+}

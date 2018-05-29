@@ -1,6 +1,7 @@
 import {
   APIHOST,
   phoneReg,
+  wxCloseApp,
   httpRequest,
   returnUrlObj,
   returnUrlParam
@@ -35,9 +36,7 @@ Page({
 
   cancelBtn: function () {
     // 关闭小程序
-    wx.navigateBack({
-      delta: 0
-    })
+    wxCloseApp();
   },
 
   // 请求验证码

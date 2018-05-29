@@ -5,9 +5,9 @@
 
 <view>
   <!-- 绑定教练 -->
-  <view wx:if="{{true}}" class="practiceInfo-container">
+  <view wx:if="{{isBindCoach}}" class="practiceInfo-container">
     <image class="bg-img" src='/images/background-big.png'></image>
-    <template is="coachesOrCourses" data="{{coachName}}" />
+    <template is="coachesOrCourses" data="{{coachName:coachName, courseInfo:courseInfo}}" />
     <!-- 扫码练车 -->
     <view class="btnBox" bindtap='onScanQR'>
       <view class="btnContent">
@@ -43,7 +43,7 @@
       <image class='score-bg' src='/images/electrocardiogram.png'></image>
       <view class='scoreBox'>
         <view class='score'>
-          <text wx:if="{{false}}" class='PracticalScoreBox'><text class='PracticalScore'>100</text>分</text>
+          <text wx:if="{{practiceStatistics.qualified}}" class='PracticalScoreBox'><text class='PracticalScore'>{{practiceStatistics.qualified}}</text>分</text>
           <text wx:else class='noScore'>暂无</text>
         </view>
         <image class='carsPracticeResults' src='/images/carsPracticeResults.png'></image>
@@ -53,10 +53,10 @@
 
     <view class='timeMileage-container'>
       <view class='mileageBox'>
-        <text class='mileageAll'>总里程：<text class='mileageNum'>{{mileageNum}} </text>公里</text>
+        <text class='mileageAll'>总里程：<text class='mileageNum'>{{practiceStatistics.totalDistance}} </text>公里</text>
       </view>
       <view class='timeBox'>
-        <text class='timeAll'>总时间：<text class='timeNum'>00:00</text></text>
+        <text class='timeAll'>总时间：<text class='timeNum'>{{practiceStatistics.totalTime}}</text>分钟</text>
       </view>
     </view>
   </view>
@@ -64,19 +64,19 @@
   <view class='ExhibitionMode-container'>
     <view class='modeBox'>
       <image mode='aspectFit' src='/images/practiceCarNumber.png'></image>
-      <text class='modeNum'>0</text>
+      <text class='modeNum'>{{practiceStatistics.totalTravel}}</text>
       <text class='modeTitle'>共计练车</text>
     </view>
 
     <view class='modeBox'>
       <image mode='aspectFit' src='/images/trainingPattern.png'></image>
-      <text class='modeNum'>0</text>
+      <text class='modeNum'>{{practiceStatistics.trainTravel}}</text>
       <text class='modeTitle'>训练模式</text>
     </view>
 
     <view class='modeBox'>
       <image mode='aspectFit' src='/images/examinationMode.png'></image>
-      <text class='modeNum'>0</text>
+      <text class='modeNum'>{{practiceStatistics.examTravel}}</text>
       <text class='modeTitle'>考试模式</text>
     </view>
   </view>
