@@ -1,8 +1,9 @@
+<!-- 练车详情页 -->
 <import src="./record-template/record-template.wxml" />
 <import src="/pages/blankPage/blankPage-template.wxml" />
 
 <view>
-  <view wx:if='{{true}}'>
+  <view wx:if='{{recordList.length}}'>
     <view class='studentInfo'>
       <view class='studentImgBox'>
         <!-- <image class='studentImg' src='/images/userImg.jpg'></image> -->
@@ -11,8 +12,8 @@
         </view>
       </view>
       <view class='nameGradeBox'>
-        <text>学员：<text>张敏</text></text>
-        <text>平均分数：<text class='grade'>78分</text></text>
+        <text>学员：<text>{{userName}}</text></text>
+        <text>平均分数：<text class='grade'>{{average}}分</text></text>
       </view>
     </view>
 
@@ -35,21 +36,17 @@
         </picker>
       </view>
 
-      <view class='filtrateBtnBox'>
+      <view class='filtrateBtnBox' bindtap='conditionQuery' >
         <text class='filtrateBtn'>筛 选</text>
       </view>
     </view>
 
-    <block>
-      <template is='recordTemplate' />
-      <template is='recordTemplate' />
-      <template is='recordTemplate' />
-      <template is='recordTemplate' />
-      <template is='recordTemplate' />
+    <block wx:for="{{recordList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
+       <template is='recordTemplate' data="{{...item}}" /> 
     </block>
 
   </view>
   <view wx:else>
-    <template is='blankTemplate' />
+    <template is='blankTemplate' data="{{annotation}}" />
   </view>
 </view>

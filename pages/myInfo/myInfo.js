@@ -4,7 +4,7 @@ const app = getApp()
 
 Page({
   data: {
-
+    userName: JSON.parse(wx.getStorageSync('USER_INFO')).user_name || '匿名',
   },
 
   jumpPurchaseRecords: function () {

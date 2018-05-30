@@ -43,7 +43,7 @@
       <image class='score-bg' src='/images/electrocardiogram.png'></image>
       <view class='scoreBox'>
         <view class='score'>
-          <text wx:if="{{practiceStatistics.qualified}}" class='PracticalScoreBox'><text class='PracticalScore'>{{practiceStatistics.qualified}}</text>分</text>
+          <text wx:if="{{achievement}}" class='PracticalScoreBox'><text class='PracticalScore'>{{achievement}}</text>分</text>
           <text wx:else class='noScore'>暂无</text>
         </view>
         <image class='carsPracticeResults' src='/images/carsPracticeResults.png'></image>
@@ -78,6 +78,36 @@
       <image mode='aspectFit' src='/images/examinationMode.png'></image>
       <text class='modeNum'>{{practiceStatistics.examTravel}}</text>
       <text class='modeTitle'>考试模式</text>
+    </view>
+  </view>
+</view>
+
+<!-- 补充资料 -->
+<view class='layer-container' wx:if="{{false}}">
+  <!-- 遮罩层 -->
+  <view class='mask-layer'></view>
+  <!-- 弹框容器 -->
+  <view class='layer-main'>
+    <view class='layer-section'>
+      <view class='layer-child'>
+        <!-- 弹框内容 -->
+        <view class='accredit-container'>
+
+          <view>
+            <view>温馨提示</view>
+            <view>
+              <view class='loginItemBox'>
+                <text>姓名：</text>
+                <view>
+                  <input class="weui-input" type="text" bindinput='bindNameInput' placeholder="请输入您的姓名" />
+                </view>
+              </view>
+              <view>为了教练更便于找到您的练车请求，请您完善个人信息</view>
+            </view>
+          </view>
+
+        </view>
+      </view>
     </view>
   </view>
 </view>

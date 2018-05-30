@@ -10,13 +10,25 @@ const formatTime = date => {
   return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 }
 
+const formatTimeSimplify = () => {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  return [year, month, day].map(formatNumber).join('-');
+}
+
 const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
 
 // 计算剩余时间
-const getRemainingTime = time =>{
+const getRemainingTime = time => {
   if (!time) {
     return '';
   }
@@ -48,6 +60,40 @@ const getRemainingTime = time =>{
     s += miniutes + '分钟';
   }
   s += seconds.toFixed(0) + '秒';
+  return s;
+}
+
+// 获取时间差
+const getTimeDifference = (startTime, endTime) => {
+  if (!startTime || !endTime) {
+    return '';
+  }
+
+  var Atime = new Date(startTime.replace(/-/g, '/')).getTime();
+  var Btime = new Date(endTime.replace(/-/g, '/')).getTime();
+  var diff = Math.abs(Btime / 1000 - Atime / 1000);
+
+  var hms = diff % 86400;
+  var days = (diff - hms) / 86400;
+  var ms = hms % 3600;
+  var hours = (hms - ms) / 3600;
+  var seconds = ms % 60;
+  var miniutes = (ms - seconds) / 60;
+
+  var s = '';
+  if (days > 0) {
+    s += days + '天';
+  }
+  if (hours > 0) {
+    s += hours + '小时';
+  }
+  if (miniutes > 0) {
+    s += miniutes + '分钟';
+  }
+  if (seconds > 0) {
+    s += seconds.toFixed(0) + '秒';
+  }
+
   return s;
 }
 
@@ -189,5 +235,7 @@ module.exports = {
   returnUrlObj,
   returnUrlParam,
   getRemainingTime,
-  wxCloseAppOnError
+  getTimeDifference,
+  wxCloseAppOnError,
+  formatTimeSimplify
 }

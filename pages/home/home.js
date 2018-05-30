@@ -17,8 +17,8 @@ Page({
     mileageNum: '100',
     isBindCoach: false,
     courseInfo: {},
-    practiceStatistics:{
-      qualified: 0, //合格率,1为100%
+    achievement: 0, //成绩
+    practiceStatistics: {
       totalDistance: 0, //总里程
       totalTime: 0, //总时间
       totalTravel: 0, //总次数
@@ -83,31 +83,28 @@ Page({
   },
 
   // 保存课程信息
-  saveVourseInfo: function (obj){
+  saveVourseInfo: function (obj) {
     this.setData({
       courseInfo: {
         title: obj.packagesName || '暂无可用课程',
-        expiryDate: obj.expiryDate.slice(0,10) || '无',
+        expiryDate: obj.expiryDate ? obj.expiryDate.slice(0, 10) : '无',
         remainingTime: obj.remainingTime || 0,
         timeAll: obj.timeAll || 0,
       }
     })
-
-    console.log(this.data.courseInfo)
   },
 
   // 获取学员练车统计
-  getDrivingStatistics: function(){
+  getDrivingStatistics: function () {
     let _this = this;
     httpRequest({
       url: APIHOST + 'api/v3/driving/collection/stu_driving_statistics',
       success: function ({ data }) {
         let dataObj = data.result;
 
-        if(dataObj){
+        if (dataObj) {
           _this.setData({
             practiceStatistics: {
-              qualified: dataObj.qualified ? dataObj.qualified * 100: 0, //合格率,1为100%
               totalDistance: dataObj.totalDistance ? (dataObj.totalDistance / 1000).toFixed(2) : 0, //总里程
               totalTime: dataObj.totalTime || 0, //总时间
               totalTravel: dataObj.totalTravel || 0, //总次数
@@ -116,6 +113,9 @@ Page({
             }
           })
         }
+
+        //获取上次练车成绩
+        _this.getPracticeResults();
       },
       error: function () {
         showMessage('获取信息出错')
@@ -160,6 +160,26 @@ Page({
           wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
         } else {
           showMessage('获取信息失败')
+        }
+      },
+      error: function () {
+        showMessage('获取信息出错')
+      }
+    })
+  },
+
+  //获取上次练车成绩
+  getPracticeResults: function () {
+    let _this = this;
+    httpRequest({
+      url: APIHOST + 'api/v3/driving/driving/line_use_api/line_record',
+      data: { pageNum: 1, pageSize: 1 },
+      success: function ({ data }) {
+        let trainList = data.result.list;
+        if (trainList.length) {
+          _this.setData({
+            achievement: trainList[0].totalScore || 0 //成绩
+          })
         }
       },
       error: function () {
@@ -232,6 +252,9 @@ Page({
                 var courseInfo = resObj.hasCourse;
                 var voucherInfo = resObj.hasVoucher;
 
+                // 保存课程信息
+                _this.saveVourseInfo({});
+
                 if (coach) {
                   var coachId = coach.userId;
                   var coachName = coach.name;
@@ -253,7 +276,7 @@ Page({
                         })
 
                         // 保存课程信息
-                        _this.saveVourseInfo(voucherInfo); 
+                        _this.saveVourseInfo(voucherInfo);
 
                         // if (state === 'from_wxgzh') {
                         //   wx.redirectTo({
@@ -265,7 +288,7 @@ Page({
                       }
 
                       // 保存课程信息
-                      _this.saveVourseInfo(courseInfo); 
+                      _this.saveVourseInfo(courseInfo);
 
                       // 重新绑定关系
                       UnbundlingRelationship();
@@ -343,7 +366,7 @@ Page({
                         })
 
                         // 保存课程信息
-                        _this.saveVourseInfo(voucherInfo); 
+                        _this.saveVourseInfo(voucherInfo);
 
                         // if (state === 'from_wxgzh') {
                         //   location.replace('./purchasedcourses.html');
@@ -373,7 +396,7 @@ Page({
                       })
 
                       // 保存课程信息
-                      _this.saveVourseInfo(courseInfo); 
+                      _this.saveVourseInfo(courseInfo);
 
                       // //有课程绑定教练和跳转练车
                       // location.replace('./purchasedcourses.html');

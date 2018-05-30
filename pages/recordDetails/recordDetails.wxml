@@ -1,31 +1,33 @@
 <import src="./recordDetail-template/recordDetail-template.wxml" />
+<import src="/pages/blankPage/blankPage-template.wxml" />
 
 <view>
   <!-- 统计信息 -->
   <view class='statistic-container'>
     <view class='statistic-item itemBox'>
       <text>用时</text>
-      <text>16分钟</text>
+      <text>{{timeDifference}}</text>
     </view>
     <view class='statistic-item'>
-      <text class='performance'>得分：90分</text>
+      <text class='performance'>得分：{{totalScore}}分</text>
     </view>
     <view class='statistic-item itemBox'>
       <text>里程</text>
-      <text>3公里</text>
+      <text>{{Distance}}公里</text>
     </view>
   </view>
 
-  <view class='statistic-titleBox'>
-    <text>评价详情</text>
+  <view wx:if="{{pointsRecordList.length}}">
+    <view class='statistic-titleBox'>
+      <text>评价详情</text>
+    </view>
+
+    <block wx:for="{{pointsRecordList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
+      <template is='recordDetailTemplate' data="{{...item}}" />
+    </block>
   </view>
 
-  <block>
-    <template is='recordDetailTemplate' />
-    <template is='recordDetailTemplate' />
-    <template is='recordDetailTemplate' />
-    <template is='recordDetailTemplate' />
-    <template is='recordDetailTemplate' />
-    <template is='recordDetailTemplate' />
-  </block>
+  <view wx:else>
+    <template is='blankTemplate' data="{{annotation}}" />
+  </view>
 </view>
