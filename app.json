@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/welcome/welcome",
     "pages/home/home",
     "pages/myInfo/editUserInfo/editUserInfo",
     "pages/courseRecord/courseRecord",
@@ -12,7 +13,8 @@
     "pages/myInfo/myInfo",
     "pages/myInfo/bindUser/bindUser",
     "pages/bindCoach/bindCoach",
-    "pages/bindCoach/SearchPhone/SearchPhone"
+    "pages/bindCoach/SearchPhone/SearchPhone",
+    "pages/customerService/customerService"
   ],
   "window": {
     "backgroundTextStyle": "dark",

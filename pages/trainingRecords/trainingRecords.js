@@ -13,7 +13,7 @@ Page({
   data: {
     startDate: '2018-01-01',
     endDate: formatTimeSimplify(),
-    userName: JSON.parse(wx.getStorageSync('USER_INFO')).user_name || '匿名',
+    userName: '匿名',
     recordParams: {
       pageNum: 1,
       pageSize: 5
@@ -21,6 +21,8 @@ Page({
     recordList: [],
     recordArr: [],
     average: 0,
+    isQueryShow: true,
+    isPracticeShow: true,
     currentItem: 'line_record',
     annotation: '当前还没有练车记录'
   },
@@ -52,15 +54,17 @@ Page({
 
   // 按条件查询
   conditionQuery: function () {
-    this.setData({
-      currentItem: 'line_record_stage',
-      recordParams: {
-        pageNum: 1,
-        pageSize: 5
-      },
-    })
-
     let _this = this;
+
+    if (this.data.currentItem == 'line_record') {
+      this.setData({
+        currentItem: 'line_record_stage',
+        recordParams: {
+          pageNum: 1,
+          pageSize: 5
+        }
+      })
+    }
 
     let params = {
       pageNum: this.data.recordParams.pageNum,
@@ -79,6 +83,9 @@ Page({
         let totalNum = 0;
 
         if (trainList.length) {
+          _this.setData({
+            isQueryShow: true
+          })
           trainList.forEach(function (item, index) {
             if (item.totalScore) {
               totalNum += item.totalScore;
@@ -119,11 +126,15 @@ Page({
           // 设置数据
           _this.setData({
             recordList: _this.data.recordArr,
-            average: totalNum / trainList.length || 0,
+            average: parseInt((totalNum / trainList.length + _this.data.average) / 2) || 0,
             recordParams: {
               pageNum: _this.data.recordParams.pageNum + 1,
               pageSize: 5
             },
+          })
+        } else {
+          _this.setData({
+            isQueryShow: false
           })
         }
       },
@@ -145,6 +156,20 @@ Page({
     }
   },
 
+  // 事件触发条件查询
+  clickConditionQuery: function () {
+    // 参数重置
+    this.setData({
+      recordList: [],
+      recordParams: {
+        pageNum: 1,
+        pageSize: 5
+      },
+    })
+    // 获取条件查询结果
+    this.conditionQuery();
+  },
+
   //获取练车记录
   getPracticeResults: function () {
     this.setData({
@@ -161,6 +186,9 @@ Page({
         let totalNum = 0;
 
         if (trainList.length) {
+          _this.setData({
+            isPracticeShow: true
+          })
           trainList.forEach(function (item, index) {
             if (item.totalScore) {
               totalNum += item.totalScore;
@@ -201,11 +229,15 @@ Page({
           // 设置数据
           _this.setData({
             recordList: _this.data.recordArr,
-            average: totalNum / trainList.length || 0,
+            average: parseInt((totalNum / trainList.length + _this.data.average) / 2) || 0,
             recordParams: {
               pageNum: _this.data.recordParams.pageNum + 1,
               pageSize: 5
             },
+          })
+        } else {
+          _this.setData({
+            isPracticeShow: false
           })
         }
       },
@@ -234,7 +266,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let flag = JSON.parse(wx.getStorageSync('USER_INFO'));
 
+    this.setData({
+      userName: flag.user_name ? flag.user_name : flag.name,
+    })
   },
 
   /**

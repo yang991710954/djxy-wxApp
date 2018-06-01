@@ -83,7 +83,7 @@
 </view>
 
 <!-- 补充资料 -->
-<view class='layer-container' wx:if="{{false}}">
+<view class='layer-container' wx:if="{{isShowModel}}">
   <!-- 遮罩层 -->
   <view class='mask-layer'></view>
   <!-- 弹框容器 -->
@@ -92,20 +92,28 @@
       <view class='layer-child'>
         <!-- 弹框内容 -->
         <view class='accredit-container'>
-
-          <view>
-            <view>温馨提示</view>
-            <view>
-              <view class='loginItemBox'>
-                <text>姓名：</text>
-                <view>
-                  <input class="weui-input" type="text" bindinput='bindNameInput' placeholder="请输入您的姓名" />
-                </view>
-              </view>
-              <view>为了教练更便于找到您的练车请求，请您完善个人信息</view>
+          <!-- 标题 -->
+          <view class='sealant-title'>
+            <text>温馨提示</text>
+          </view>
+          <view class='sealantBox'>
+            <view class='sealantItemBox'>
+              <text class='weui-label'>姓名：</text>
+              <input class="weui-input" type="text" bindinput='bindNameInput' placeholder="请输入您的姓名" />
+            </view>
+            <view class="weui-tips">
+              <text>为了便于教练找到您的练车请求</text>
+              <text>请您完善个人信息</text>
             </view>
           </view>
-
+          <view class='sealantBtn-group'>
+            <view class='btn-Item' bindtap='onCancel'>
+              <text>取消</text>
+            </view>
+            <view class='btn-Item' bindtap='onConfirm'>
+              <text>确定</text>
+            </view>
+          </view>
         </view>
       </view>
     </view>

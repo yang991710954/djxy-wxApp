@@ -1,0 +1,8 @@
+<!--pages/welcome/welcome.wxml-->
+<view class="container">
+  <view class="jumpBox" bindtap='jumpPage'>
+    <view>{{countDown}}</view>
+    <view>跳过</view>
+  </view>
+  <image class="activeImg" src="{{activeUrl}}"></image>
+</view>

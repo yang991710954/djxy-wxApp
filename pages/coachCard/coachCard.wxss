@@ -56,9 +56,14 @@
   flex-direction: row;
 }
 
-.coachName>text {
-  font-size: 46rpx;
+.coachName > .nameStyle {
+  display: block;
+  font-size: 40rpx;
   color: #333;
+  width: 155rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .schoolAge {

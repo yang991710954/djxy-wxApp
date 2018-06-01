@@ -3,7 +3,7 @@
 <import src="/pages/blankPage/blankPage-template.wxml" />
 
 <view>
-  <view wx:if='{{recordList.length}}'>
+  <view wx:if='{{isPracticeShow}}'>
     <view class='studentInfo'>
       <view class='studentImgBox'>
         <!-- <image class='studentImg' src='/images/userImg.jpg'></image> -->
@@ -36,14 +36,22 @@
         </picker>
       </view>
 
-      <view class='filtrateBtnBox' bindtap='conditionQuery' >
+      <view class='filtrateBtnBox' bindtap='clickConditionQuery'>
         <text class='filtrateBtn'>筛 选</text>
       </view>
     </view>
 
-    <block wx:for="{{recordList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
-       <template is='recordTemplate' data="{{...item}}" /> 
-    </block>
+    <view class='recordListBox'>
+      <view wx:if="{{recordList.length}}">
+        <block wx:for="{{recordList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
+          <template is='recordTemplate' data="{{...item}}" />
+        </block>
+      </view>
+
+      <view wx:else>
+        <template is='blankTemplate' data="{{annotation}}" />
+      </view>
+    </view>
 
   </view>
   <view wx:else>

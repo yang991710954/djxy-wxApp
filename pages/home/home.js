@@ -24,14 +24,38 @@ Page({
       totalTravel: 0, //总次数
       trainTravel: 0, //训练次数
       examTravel: 0, //考试次数
-    }
+    },
+    inputName: '',//用户名
+    isShowModel: false,
+    courseFlag: true,
+    coachId: '',
   },
 
   // 扫码练车
   onScanQR: function () {
+    // if (!this.data.courseFlag) {
+    //   wx.showModal({
+    //     title: '温馨提示',
+    //     content: '暂无可用课程，请选择练车模式吧！',
+    //     success: function (res) {
+    //       if (res.confirm) {
+    //         wx.navigateTo({
+    //           url: '/pages/selectTrainingMode/selectTrainingMode',
+    //         })
+    //       } else if (res.cancel) {
+    //         console.log('用户点击取消')
+    //       }
+    //     }
+    //   })
+
+    //   return;
+    // }
+
     wx.scanCode({
       success: (res) => {
+
         console.log(res);
+
         wx.showToast({
           title: '成功',
           icon: 'success',
@@ -69,6 +93,56 @@ Page({
     })
   },
 
+  // 获取输入框的值
+  bindNameInput: function (e) {
+    this.setData({
+      inputName: e.detail.value
+    })
+  },
+
+  //保存用户名
+  onConfirm: function () {
+    let _this = this;
+    let inputName = _this.data.inputName;
+
+    if (!inputName) {
+      showMessage('请输入姓名');
+      return;
+    }
+
+    httpRequest({
+      url: APIHOST + 'api/base/user/update_user_name',
+      contentType: 'application/x-www-form-urlencoded',
+      method: 'post',
+      data: { userName: inputName },
+      success: function ({ data }) {
+        if (data.result) {
+          _this.setData({
+            isShowModel: false
+          })
+
+          // 更新本人信息
+          _this.getStudentInfo();
+
+          wx.showToast({
+            title: '设置成功',
+            icon: 'success',
+            duration: 2000
+          })
+        }
+      },
+      error: function () {
+        showMessage('设置失败');
+      }
+    })
+  },
+
+  // 关闭弹框
+  onCancel: function () {
+    this.setData({
+      isShowModel: false
+    })
+  },
 
   // 阿里OSS 获取头像
   aliOss: function () {
@@ -125,12 +199,19 @@ Page({
 
   // 获取本人信息
   getStudentInfo: function () {
+    let _this = this;
+
     httpRequest({
       url: APIHOST + '/api/base/user/info',
       success: function ({ data }) {
         let dataObj = data.result;
 
         if (dataObj && dataObj.id) {
+          if (!dataObj.user_name) {
+            _this.setData({
+              isShowModel: true
+            })
+          }
           wx.setStorageSync('USER_INFO', JSON.stringify(dataObj));
         } else {
           showMessage('获取信息失败')
@@ -203,7 +284,7 @@ Page({
           method: 'post',
           data: {
             code: res.code,
-            state: 1
+            state: _this.data.coachId
           },
           success: function ({ data }) {
             let resObj = data.result;
@@ -250,10 +331,10 @@ Page({
                 var currentCoach = resObj.newCoach;
 
                 var courseInfo = resObj.hasCourse;
-                var voucherInfo = resObj.hasVoucher;
+                var voucherInfo = resObj.hasVoucher || {};
 
                 // 保存课程信息
-                _this.saveVourseInfo({});
+                _this.saveVourseInfo(voucherInfo);
 
                 if (coach) {
                   var coachId = coach.userId;
@@ -261,6 +342,34 @@ Page({
 
                   var newCoach = resObj.newCoach;
                   var newCoachId = newCoach.coachId;
+
+                  // 如果没有新教练
+                  if (!currentCoach) {
+                    if (!resObj.hasCourse) {
+                      //有体验券绑定教练和跳转练车
+                      if (resObj.hasVoucher) {
+
+                        //do something 业务逻辑
+                        wx.showToast({
+                          title: '不同教练有体验券',
+                          icon: 'success',
+                          duration: 2000
+                        })
+
+                        // 保存课程信息
+                        _this.saveVourseInfo(voucherInfo);
+
+                      }
+
+                      // 保存课程信息
+                      _this.saveVourseInfo(courseInfo);
+
+                      //do something 业务逻辑
+                      _this.getCocahInfo(); // 获取绑定获取教练信息
+                    }
+
+                    return;
+                  }
 
                   // 对比当前扫码教练和老教练
                   if (coachId != newCoachId) { //不是同一个教练
@@ -375,8 +484,9 @@ Page({
                       } else {
 
                         //do something 业务逻辑
-                        wx.navigateTo({//去购买课程
-                          url: '/pages/selectTrainingMode/selectTrainingMode',
+
+                        _this.setData({ //去购买课程
+                          courseFlag: false
                         })
 
                         // //去购买课程
@@ -404,6 +514,14 @@ Page({
                     }
                   }
                 } else {
+                  // 如果没有新教练
+                  if (!currentCoach) {
+                    _this.setData({
+                      isBindCoach: false
+                    })
+                    return;
+                  }
+
                   // 通过参数查询扫码教练id
                   var currentCoachId = currentCoach.coachId;
                   console.log(currentCoachId)
@@ -462,7 +580,22 @@ Page({
     console.log(scene);
     console.log(query);
 
-    this.initHome();// 初始化首页显示
+    // var flag = wx.getStorageSync('isUnbind');
+    // if (true && flag != 'unbind') {
+    //   this.setData({
+    //     coachId: 249
+    //   })
+    // } else {
+    //   this.setData({
+    //     coachId: ''
+    //   })
+    // }
+
+    this.setData({
+      coachId: 249
+    })
+    // 初始化首页显示
+    this.initHome();
   },
 
   /**
@@ -476,7 +609,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    // 重载页面数据
+    this.initHome();
   },
 
   /**

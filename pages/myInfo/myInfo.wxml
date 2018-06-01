@@ -13,7 +13,9 @@
     <image class='enterEdit' src='/images/enterArrow.png'></image>
   </view>
 
-  <image class='serviceBanner' src='/images/service.png'></image>
+  <view bindtap='contactCustomerService'>
+    <image class='serviceBanner' src='/images/service.png'></image>
+  </view>
 
   <view class='recordBox' bindtap='jumpPurchaseRecords'>
     <text>课程购买记录</text>

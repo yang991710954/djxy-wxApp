@@ -1,0 +1,43 @@
+/* pages/welcome/welcome.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.activeImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.jumpBox {
+  position: fixed;
+  top: 20rpx;
+  right: 20rpx;
+  height: 30rpx;
+  line-height: 30rpx;
+  display: flex;
+  flex-direction: row;
+  padding: 10rpx;
+  border-radius: 30rpx;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.jumpBox>view {
+  color: #fff;
+  font-size: 24rpx;
+  padding: 0 10rpx;
+}
+
+.jumpBox>view:nth-child(1){
+  border-right: 1px solid #fff;
+  height: 20rpx;
+  margin-top:5rpx;
+  line-height: 20rpx;
+}

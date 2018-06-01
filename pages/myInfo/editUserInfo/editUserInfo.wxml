@@ -6,7 +6,7 @@
         <open-data class='userImg' type="userAvatarUrl"></open-data>
       </view>
     </view>
-    <view class='myNameBox'>
+    <view class='myNameBox' bindtap='amendUserImg'>
       <!-- <text>修改头像</text> -->
       <view>
         <open-data type="userNickName"></open-data>
@@ -16,7 +16,7 @@
   </view>
   <view class='my-category'>
     <text>姓名：</text>
-    <input class='input' placeholder='请填写您的姓名'></input>
+    <input class='input' placeholder='请填写您的姓名' value='{{inputName}}' bindinput='bindNameInput'></input>
   </view>
   <view class='my-category' bindtap='selectSex'>
     <text>性别：</text>

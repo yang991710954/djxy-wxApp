@@ -97,3 +97,12 @@
   background-color: #19a2ff;
   border-radius: 10rpx;
 }
+
+/* .recordListBox {
+  position: absolute;
+  bottom: 0;
+  top: 348rpx;
+  width: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+} */

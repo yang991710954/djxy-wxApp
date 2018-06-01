@@ -3,21 +3,21 @@
   <view class='businessCard'>
     <view class='coachInfo-container'>
       <view class='coachImgBox'>
-        <image class='coachImg' src='/images/userImg.jpg'></image>
+        <image class='coachImg' src='/images/coachImg.png'></image>
       </view>
 
       <view class='coachStatusBox'>
         <view class='coachStatus'>
           <view class='coachName'>
-            <text>张教练</text>
+            <text class='nameStyle'>{{coachName}}</text>
           </view>
 
           <view class='schoolAge'>
-            <text>教龄10年</text>
+            <text>教龄{{drivingage}}年</text>
           </view>
         </view>
 
-        <text class='drivingSchool'>湘麓驾校</text>
+        <text class='drivingSchool'>{{drivingschool}}</text>
       </view>
     </view>
     <view class='qr-container'>
@@ -30,7 +30,7 @@
       <text>解绑教练</text>
     </view>
 
-    <view class='searchModeItem'>
+    <view class='searchModeItem' bindtap='contactCustomerService'>
       <text>联系客服</text>
       <image class="whiteArrow" src='/images/whiteArrow.png'></image>
     </view>

@@ -1,10 +1,10 @@
 <template name='courseRecordTemplate'>
   <view class='record-container'>
-    <text>2018-03-26 10:32</text>
-    <text>购买：滴驾只能评判课程</text>
+    <text>{{createTime}}</text>
+    <text>购买：{{commodityName}}</text>
     <view class='recordTime'>
-      <text>购买时间：1小时</text>
-      <text>￥25.0</text>
+      <text>购买时间：{{skuNum}}</text>
+      <text>{{payMoney}}</text>
     </view>
   </view>
 </template>

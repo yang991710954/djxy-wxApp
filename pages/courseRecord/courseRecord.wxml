@@ -1,16 +1,14 @@
 <import src="./courseRecord-template/courseRecord-template.wxml" />
+<import src="/pages/blankPage/blankPage-template.wxml" />
 
 <view>
-  <view wx:if='{{true}}'>
-    <template is='courseRecordTemplate' />
-    <template is='courseRecordTemplate' />
-    <template is='courseRecordTemplate' />
-    <template is='courseRecordTemplate' />
-    <template is='courseRecordTemplate' />
-    <template is='courseRecordTemplate' />
-    <template is='courseRecordTemplate' />
+  <view wx:if='{{orderList.length}}'>
+    <block wx:for="{{orderList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
+      <template is='courseRecordTemplate' data="{{...item}}" />
+    </block>
   </view>
+
   <view wx:else>
-    <template is='blankTemplate' />
+    <template is='blankTemplate' data="{{annotation}}"/>
   </view>
 </view>
