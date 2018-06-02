@@ -310,7 +310,7 @@ Page({
                 // 获取学员信息
                 _this.getStudentInfo();
 
-                // 获取绑定获取教练信息
+                // 获取绑定教练信息
                 _this.getCocahInfo();
 
                 // 获取学员练车统计
@@ -358,14 +358,13 @@ Page({
 
                         // 保存课程信息
                         _this.saveVourseInfo(voucherInfo);
-
                       }
 
                       // 保存课程信息
                       _this.saveVourseInfo(courseInfo);
 
                       //do something 业务逻辑
-                      _this.getCocahInfo(); // 获取绑定获取教练信息
+                      _this.getCocahInfo(); // 获取绑定教练信息
                     }
 
                     return;
@@ -425,7 +424,7 @@ Page({
                                       if (data.result) {
 
                                         //do something 业务逻辑
-                                        _this.getCocahInfo(); // 获取绑定获取教练信息
+                                        _this.getCocahInfo(); // 获取绑定教练信息
 
                                         wx.showToast({
                                           title: '绑定教练成功',
@@ -534,7 +533,7 @@ Page({
                       if (data.result) {
 
                         //do something 业务逻辑
-                        _this.getCocahInfo(); // 获取绑定获取教练信息
+                        _this.getCocahInfo(); // 获取绑定教练信息
 
                         wx.showToast({
                           title: '不同教练有体验券',
@@ -574,28 +573,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
-    var scene = decodeURIComponent(options.scene)
-    var query = options.query // 3736
-    console.log(scene);
-    console.log(query);
+    var jumpUrl = wx.getStorageSync('jump');
+    console.log(jumpUrl);
 
-    // var flag = wx.getStorageSync('isUnbind');
-    // if (true && flag != 'unbind') {
-    //   this.setData({
-    //     coachId: 249
-    //   })
-    // } else {
-    //   this.setData({
-    //     coachId: ''
-    //   })
-    // }
-
-    this.setData({
-      coachId: 249
-    })
-    // 初始化首页显示
-    this.initHome();
+    if (jumpUrl) {
+      wx.navigateTo({
+        url: jumpUrl,
+      })
+    }
   },
 
   /**
@@ -609,7 +594,25 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    // 重载页面数据
+    var flag = wx.getStorageSync('isUnbind');
+    var coachId = wx.getStorageSync('coachId');
+
+    console.log(flag);
+    console.log(coachId);
+
+    if (coachId && flag != 'unbind') {
+      console.log(111)
+      this.setData({
+        coachId: coachId
+      })
+    } else {
+      console.log(222)
+      this.setData({
+        coachId: ''
+      })
+    }
+
+    // 初始化或重载页面
     this.initHome();
   },
 
@@ -617,7 +620,9 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    // 移除标记
+    wx.removeStorageSync('jump');
+    wx.removeStorageSync('isUnbind');
   },
 
   /**
