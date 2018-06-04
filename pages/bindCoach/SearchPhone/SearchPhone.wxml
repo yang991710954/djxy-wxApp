@@ -5,18 +5,18 @@
   </view>
 
 
-  <view class='searchBtn' bindtap='jumpPhoneSearch'>
+  <view class='searchBtn' bindtap='coachPhoneSearch'>
     <text>搜索</text>
     <image class="whiteArrow" src='/images/whiteArrow.png'></image>
   </view>
 </view>
 
-<view class="coach-container">
+<view class="coach-container" wx:if="{{isShowCoach}}">
   <!-- 教练信息 -->
-  <view wx:if="{{true}}" class="coachInfo" bindtap='bindCoachFormPhone'>
-    <image class='coachImg' src='/images/userImg.jpg'></image>
+  <view wx:if="{{coachId}}" class="coachInfo" bindtap='bindCoachFormPhone'>
+    <image class='coachImg' src='/images/coachImg.png'></image>
     <view>
-      <text class="coachName">{{15814485235}}</text>
+      <text class="coachName">{{coachName || coachPhone}}</text>
       <image class="coachJump" src='/images/jump.png'></image>
     </view>
   </view>

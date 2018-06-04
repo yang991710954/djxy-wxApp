@@ -29,6 +29,7 @@ Page({
             url: APIHOST + 'api/v3/driving/driving/student/unbind_coach',
             success: function ({ data }) {
               wx.setStorageSync('isUnbind', 'unbind');
+              wx.removeStorageSync('coachId');
 
               if (data.result) {
                 wx.showToast({

@@ -239,9 +239,7 @@ Page({
           })
 
           wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
-        } else {
-          showMessage('获取信息失败')
-        }
+        } 
       },
       error: function () {
         showMessage('获取信息出错')
@@ -277,6 +275,7 @@ Page({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         wx.setStorageSync('CODE', res.code);
+
         httpRequest({
           loading: true,
           url: APIHOST + 'api/base/binding_checking_api/f/binding_checking_stu_min_app',
@@ -316,13 +315,6 @@ Page({
                 // 获取学员练车统计
                 _this.getDrivingStatistics();
 
-              } else {
-                wx.showToast({
-                  title: '获取token失败',
-                  icon: 'none',
-                  image: '/images/exclamation.png',
-                  duration: 2000
-                })
               }
 
               //2没有老教练直接绑定新教练,然后跳转到购买课程
@@ -597,16 +589,11 @@ Page({
     var flag = wx.getStorageSync('isUnbind');
     var coachId = wx.getStorageSync('coachId');
 
-    console.log(flag);
-    console.log(coachId);
-
     if (coachId && flag != 'unbind') {
-      console.log(111)
       this.setData({
         coachId: coachId
       })
     } else {
-      console.log(222)
       this.setData({
         coachId: ''
       })

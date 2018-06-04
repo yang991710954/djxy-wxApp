@@ -9,7 +9,6 @@ import {
 const promise = require("../../utils/promise.min.js");
 
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -24,8 +23,25 @@ Page({
 
   // 获取首页图片
   getActiveImg: function () {
-    this.setData({
-      activeUrl: '/images/testImg/test1.jpeg'
+    let _this = this;
+
+    httpRequest({
+      loading: true,
+      url: APIHOST + 'api/base/banner/f/load_banners_by_code',
+      // contentType: 'application/x-www-form-urlencoded',
+      data: { code: 'STUSTART_V3' },
+      success: function ({ data }) {
+        let resObj = data.result;
+
+        if (resObj[0]) {
+          _this.setData({
+            activeUrl: resObj[0].link
+          })
+        }
+      },
+      error: function () {
+        showMessage('获取图片失败')
+      }
     })
   },
 
@@ -124,11 +140,11 @@ Page({
     console.log(scene);
     console.log(query);
 
-    this.setData({
-      coachId: 249
-    })
+    // this.setData({
+    //   coachId: 249
+    // })
 
-    wx.setStorageSync('coachId', 249);
+    // wx.setStorageSync('coachId', 249);
 
     // 获取首页图片
     this.getActiveImg();
