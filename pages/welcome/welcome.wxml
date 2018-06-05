@@ -4,5 +4,6 @@
     <view>{{countDown}}</view>
     <view>跳过</view>
   </view>
-  <image class="activeImg" src="{{activeUrl}}"></image>
+  <image wx:if="{{activeUrl}}" class="activeImg" src="{{activeUrl}}"></image>
+  <image wx:else class="logoStyle" src="/images/logo.png"></image>
 </view>

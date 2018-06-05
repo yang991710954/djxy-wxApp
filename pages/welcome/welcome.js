@@ -98,7 +98,7 @@ Page({
   // 初始化数据
   initData: function () {
     let _this = this;
-    var PromiseObj = new Promise(function (resolve, reject) {
+    let PromiseObj = new Promise(function (resolve, reject) {
       // 登录
       wx.login({
         success: res => {
@@ -115,8 +115,11 @@ Page({
             },
             success: function ({ data }) {
               let resObj = data.result;
+
               if (resObj) {
                 resolve(resObj);
+                wx.setStorageSync('OPEN_ID', resObj.openid);
+                
                 console.log('执行完成');
               } else {
                 reject('系统错误，请稍后重试！');
@@ -135,16 +138,19 @@ Page({
    */
   onLoad: function (options) {
     // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
-    var scene = decodeURIComponent(options.scene)
-    var query = options.query // 3736
-    console.log(scene);
-    console.log(query);
+    let scene = decodeURIComponent(options.scene)
+    let query = options.query || {};
 
-    // this.setData({
-    //   coachId: 249
-    // })
+    let model = query.model ? query.model : 'from_zdpp';
+    let coachId = query.coachId ? query.coachId : '';
 
-    // wx.setStorageSync('coachId', 249);
+    this.setData({
+      model: model,
+      coachId: coachId
+    })
+
+    wx.setStorageSync('model', model);
+    wx.setStorageSync('coachId', coachId);
 
     // 获取首页图片
     this.getActiveImg();

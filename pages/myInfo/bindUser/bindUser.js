@@ -194,10 +194,10 @@ Page({
           loading: true,
           url: APIHOST + 'api/ui/base/user/get_auth_token?' + returnUrlParam(dataObj),
           method: 'post',
-          success: function (res) {
-            let resData = res.data.result;
+          success: function ({ data }) {
+            let resData = data.result;
             console.log(resData)
-            if (res.data.error) {
+            if (!resData) {
               wx.showToast({
                 title: '获取token失败',
                 icon: 'none',
@@ -216,7 +216,7 @@ Page({
             wx.setStorageSync('SESSION_KEY', _this.data.token);
 
             wx.vibrateLong({
-              success:function(){
+              success: function () {
                 wx.showToast({
                   title: '授权成功',
                   icon: 'success',

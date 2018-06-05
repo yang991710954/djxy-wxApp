@@ -140,8 +140,8 @@ const httpRequest = (params) => {
 }
 
 // 获取URL参数
-const returnUrlObj = () => {
-  var strArr = location.search.replace('?', '');
+const returnUrlObj = (ulr) => {
+  var strArr = url.replace('?', '');
   strArr = strArr.split('&');
   var obj = {};
   for (var i in strArr) {

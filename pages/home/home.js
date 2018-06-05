@@ -29,38 +29,76 @@ Page({
     isShowModel: false,
     courseFlag: true,
     coachId: '',
+    model: '',
   },
 
   // 扫码练车
   onScanQR: function () {
-    // if (!this.data.courseFlag) {
-    //   wx.showModal({
-    //     title: '温馨提示',
-    //     content: '暂无可用课程，请选择练车模式吧！',
-    //     success: function (res) {
-    //       if (res.confirm) {
-    //         wx.navigateTo({
-    //           url: '/pages/selectTrainingMode/selectTrainingMode',
-    //         })
-    //       } else if (res.cancel) {
-    //         console.log('用户点击取消')
-    //       }
-    //     }
-    //   })
+    let _this = this;
 
-    //   return;
-    // }
+    if (!this.data.courseFlag) {
+      wx.showModal({
+        title: '温馨提示',
+        content: '暂无可用课程，请选择练车模式吧！',
+        success: function (res) {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '/pages/selectTrainingMode/selectTrainingMode',
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+      return;
+    }
 
     wx.scanCode({
       success: (res) => {
-
         console.log(res);
+        console.log(returnUrlObj(res))
+        if (res.errMsg == "scanCode:ok") {
+          showMessage('扫码失败');
+          return;
+        }
 
-        wx.showToast({
-          title: '成功',
-          icon: 'success',
-          duration: 2000
+        let model = returnUrlObj(res).model ? returnUrlObj(res).model : 'from_zdpp';
+        let coachId = returnUrlObj(res).coachId ? returnUrlObj(res).coachId : '';
+
+        this.setData({
+          model: model,
+          coachId: coachId
         })
+
+        wx.setStorageSync('model', model);
+        wx.setStorageSync('coachId', coachId);
+
+        if (returnUrlObj(res).appid === 'student_min_app') {
+          // 发送练车请求
+          _this.sendPracticeRequest();
+        }
+      }
+    })
+  },
+
+  // 发送练车请求
+  sendPracticeRequest: function () {
+    httpRequest({
+      url: APIHOST + 'api/v3/driving/driving/student/student_free_apply',
+      method: 'post',
+      success: function ({ data }) {
+        if (data.result) {
+          wx.showToast({
+            title: '练车请求成功',
+            icon: 'success',
+            duration: 2000
+          })
+        } else {
+          showMessage('练车请求失败');
+        }
+      },
+      error: function () {
+        showMessage('练车请求出错');
       }
     })
   },
@@ -158,13 +196,16 @@ Page({
 
   // 保存课程信息
   saveVourseInfo: function (obj) {
+    let dataObj = obj ? obj : {};
+
     this.setData({
       courseInfo: {
-        title: obj.packagesName || '暂无可用课程',
-        expiryDate: obj.expiryDate ? obj.expiryDate.slice(0, 10) : '无',
-        remainingTime: obj.remainingTime || 0,
-        timeAll: obj.timeAll || 0,
-      }
+        title: dataObj.packagesName || '暂无可用课程',
+        expiryDate: dataObj.expiryDate ? dataObj.expiryDate.slice(0, 10) : '无',
+        remainingTime: dataObj.remainingTime || 0,
+        timeAll: dataObj.timeAll || 0,
+      },
+      courseFlag: obj ? true : false
     })
   },
 
@@ -223,6 +264,40 @@ Page({
     })
   },
 
+  //绑定教练
+  bindCoach: function (newCoachId) {
+    let _this = this;
+
+    httpRequest({
+      url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
+      data: { coachId: newCoachId },
+      success: function ({ data }) {
+        if (data.result) {
+
+          // 获取绑定教练信息
+          _this.getCocahInfo();
+
+          wx.showToast({
+            title: '绑定教练成功',
+            icon: 'success',
+            duration: 2000
+          })
+
+          // 标记为无课程
+          _this.setData({
+            courseFlag: false
+          })
+
+        } else {
+          showMessage('绑定教练失败')
+        }
+      },
+      error: function () {
+        showMessage('绑定教练出错')
+      }
+    })
+  },
+
   // 获取绑定获取教练信息
   getCocahInfo: function () {
     let _this = this;
@@ -239,7 +314,7 @@ Page({
           })
 
           wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
-        } 
+        }
       },
       error: function () {
         showMessage('获取信息出错')
@@ -317,237 +392,8 @@ Page({
 
               }
 
-              //2没有老教练直接绑定新教练,然后跳转到购买课程
-              (function serviceLogic() {
-                var coach = resObj.coach;
-                var currentCoach = resObj.newCoach;
-
-                var courseInfo = resObj.hasCourse;
-                var voucherInfo = resObj.hasVoucher || {};
-
-                // 保存课程信息
-                _this.saveVourseInfo(voucherInfo);
-
-                if (coach) {
-                  var coachId = coach.userId;
-                  var coachName = coach.name;
-
-                  var newCoach = resObj.newCoach;
-                  var newCoachId = newCoach.coachId;
-
-                  // 如果没有新教练
-                  if (!currentCoach) {
-                    if (!resObj.hasCourse) {
-                      //有体验券绑定教练和跳转练车
-                      if (resObj.hasVoucher) {
-
-                        //do something 业务逻辑
-                        wx.showToast({
-                          title: '不同教练有体验券',
-                          icon: 'success',
-                          duration: 2000
-                        })
-
-                        // 保存课程信息
-                        _this.saveVourseInfo(voucherInfo);
-                      }
-
-                      // 保存课程信息
-                      _this.saveVourseInfo(courseInfo);
-
-                      //do something 业务逻辑
-                      _this.getCocahInfo(); // 获取绑定教练信息
-                    }
-
-                    return;
-                  }
-
-                  // 对比当前扫码教练和老教练
-                  if (coachId != newCoachId) { //不是同一个教练
-                    if (!resObj.hasCourse) {
-                      //有体验券绑定教练和跳转练车
-                      if (resObj.hasVoucher) {
-
-                        //do something 业务逻辑
-                        wx.showToast({
-                          title: '不同教练有体验券',
-                          icon: 'success',
-                          duration: 2000
-                        })
-
-                        // 保存课程信息
-                        _this.saveVourseInfo(voucherInfo);
-
-                        // if (state === 'from_wxgzh') {
-                        //   wx.redirectTo({
-                        //     url: '/pages/purchaseCourse/purchaseCourse',
-                        //   })
-                        //   return;
-                        // }
-
-                      }
-
-                      // 保存课程信息
-                      _this.saveVourseInfo(courseInfo);
-
-                      // 重新绑定关系
-                      UnbundlingRelationship();
-                    }
-
-                    // 解绑老教练绑定新教练
-                    function UnbundlingRelationship() {
-                      //询问框
-                      wx.showModal({
-                        title: '温馨提示',
-                        content: '您需要先解除 ' + coachName + ' 教练的绑定才能进行后续操作（解除绑定后之前购买的课程也会失效）',
-                        confirmText: '现在绑定',
-                        success: function (res) {
-                          if (res.confirm) {
-                            //解绑教练
-                            httpRequest({
-                              url: APIHOST + '/api/v3/driving/driving/student/unbind_coach',
-                              success: function ({ data }) {
-                                if (data.result) {
-                                  //绑定教练
-                                  httpRequest({
-                                    url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
-                                    data: { coachId: newCoachId },
-                                    success: function ({ data }) {
-                                      if (data.result) {
-
-                                        //do something 业务逻辑
-                                        _this.getCocahInfo(); // 获取绑定教练信息
-
-                                        wx.showToast({
-                                          title: '绑定教练成功',
-                                          icon: 'success',
-                                          duration: 2000
-                                        })
-
-                                        // if (model === 'from_zdbb') {
-                                        //   location.replace('./selectTrainingMode.html');
-                                        // } else {
-                                        //   location.replace('./buycoures_one.html');
-                                        // }
-
-                                      } else {
-                                        wxCloseAppOnError('绑定教练失败,请重试!')
-                                      }
-                                    },
-                                    error: function () {
-                                      wxCloseAppOnError('绑定教练出错,请重试!')
-                                    }
-                                  })
-                                } else {
-                                  wxCloseAppOnError('解绑教练失败,请重试!')
-                                }
-                              },
-                              error: function () {
-                                wxCloseAppOnError('解绑教练出错,请重试!')
-                              }
-                            })
-                          } else if (res.cancel) {
-                            wxCloseAppOnError('您已放弃练车!')
-                          }
-                        }
-                      })
-                    }
-                  } else {//是同一个教练
-                    //3.判断有无课程及跳转(判断是否来自微信公众号)
-                    if (!resObj.hasCourse) {
-                      //有体验券绑定教练和跳转练车
-                      if (resObj.hasVoucher) {
-
-                        //do something 业务逻辑
-                        wx.showToast({
-                          title: '同一教练有体验券',
-                          icon: 'success',
-                          duration: 2000
-                        })
-
-                        // 保存课程信息
-                        _this.saveVourseInfo(voucherInfo);
-
-                        // if (state === 'from_wxgzh') {
-                        //   location.replace('./purchasedcourses.html');
-                        //   return;
-                        // }
-                      } else {
-
-                        //do something 业务逻辑
-
-                        _this.setData({ //去购买课程
-                          courseFlag: false
-                        })
-
-                        // //去购买课程
-                        // if (model === 'from_zdbb') {
-                        //   location.replace('./selectTrainingMode.html');
-                        // } else {
-                        //   location.replace('./buycoures_one.html');
-                        // }
-                      }
-                    } else {
-
-                      //do something 业务逻辑
-                      wx.showToast({
-                        title: '同一教练有课程',
-                        icon: 'success',
-                        duration: 2000
-                      })
-
-                      // 保存课程信息
-                      _this.saveVourseInfo(courseInfo);
-
-                      // //有课程绑定教练和跳转练车
-                      // location.replace('./purchasedcourses.html');
-                      // return;
-                    }
-                  }
-                } else {
-                  // 如果没有新教练
-                  if (!currentCoach) {
-                    _this.setData({
-                      isBindCoach: false
-                    })
-                    return;
-                  }
-
-                  // 通过参数查询扫码教练id
-                  var currentCoachId = currentCoach.coachId;
-                  console.log(currentCoachId)
-
-                  //绑定教练
-                  httpRequest({
-                    url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
-                    data: { coachId: currentCoachId },
-                    success: function ({ data }) {
-                      if (data.result) {
-
-                        //do something 业务逻辑
-                        _this.getCocahInfo(); // 获取绑定教练信息
-
-                        wx.showToast({
-                          title: '不同教练有体验券',
-                          icon: 'success',
-                          duration: 2000
-                        })
-                        // if (model === 'from_zdbb') {
-                        //   location.replace('./selectTrainingMode.html');
-                        // } else {
-                        //   location.replace('./buycoures_one.html');
-                        // }
-
-                      } else {
-                        wxCloseAppOnError('绑定教练失败,请重试!')
-                      }
-                    },
-                    error: function () {
-                      wxCloseAppOnError('绑定教练出错,请重试!')
-                    }
-                  })
-                }
-              })()
+              //do something!
+              _this.serviceLogic(resObj);
 
             } else {
               wxCloseAppOnError('系统错误，请稍后重试！')
@@ -561,18 +407,116 @@ Page({
     })
   },
 
+  // 练车逻辑
+  serviceLogic: function (resObj) {
+    let _this = this;
+
+    let coach = resObj.coach;
+    let currentCoach = resObj.newCoach;
+
+    let courseInfo = resObj.hasCourse;
+    let voucherInfo = resObj.hasVoucher;
+
+    let courseObj = courseInfo || voucherInfo;
+    let hasObj = !courseInfo && !voucherInfo;
+
+    // 保存课程信息
+    _this.saveVourseInfo(courseObj);
+
+    if (coach) {
+      let coachId = coach.userId;
+      let coachName = coach.name;
+
+      // 如果没有新教练
+      if (!currentCoach) {
+        return;
+      }
+
+      let newCoach = resObj.newCoach;
+      let newCoachId = newCoach.coachId;
+
+      // 对比当前扫码教练和老教练
+      if (coachId != newCoachId) { //不是同一个教练
+
+        if (courseObj) {
+
+          // 重新绑定关系
+          UnbundlingRelationship();
+
+        } else {
+
+          //绑定教练
+          _this.bindCoach(newCoachId);
+
+        }
+
+        // 解绑老教练绑定新教练
+        function UnbundlingRelationship() {
+          //询问框
+          wx.showModal({
+            title: '温馨提示',
+            content: '您需要先解除 ' + coachName + ' 教练的绑定才能进行后续操作（解除绑定后之前购买的课程也会失效）',
+            confirmText: '现在绑定',
+            success: function (res) {
+              if (res.confirm) {
+                //解绑教练
+                httpRequest({
+                  url: APIHOST + '/api/v3/driving/driving/student/unbind_coach',
+                  success: function ({ data }) {
+                    if (data.result) {
+                      //绑定教练
+                      _this.bindCoach(newCoachId);
+                    } else {
+                      showMessage('解绑教练失败')
+                    }
+                  },
+                  error: function () {
+                    showMessage('解绑教练出错')
+                  }
+                })
+              } else if (res.cancel) {
+                wxCloseAppOnError('您已放弃练车!')
+              }
+            }
+          })
+        }
+      } else {//是同一个教练
+        //3.判断有无课程及跳转(判断是否来自微信公众号)
+        if (hasObj) {
+
+          // 标记为无课程
+          _this.setData({
+            courseFlag: false
+          })
+
+        } else {
+          // 发送练车请求
+          _this.sendPracticeRequest();
+        }
+      }
+    } else {
+      // 如果没有新教练
+      if (!currentCoach) {
+        _this.setData({
+          isBindCoach: false
+        })
+        return;
+      }
+
+      // 通过参数查询扫码教练id
+      let currentCoachId = currentCoach.coachId;
+      console.log(currentCoachId)
+
+      //绑定教练
+      _this.bindCoach(currentCoachId)
+    }
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var jumpUrl = wx.getStorageSync('jump');
-    console.log(jumpUrl);
 
-    if (jumpUrl) {
-      wx.navigateTo({
-        url: jumpUrl,
-      })
-    }
   },
 
   /**
@@ -586,12 +530,24 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    var flag = wx.getStorageSync('isUnbind');
-    var coachId = wx.getStorageSync('coachId');
+    let jumpUrl = wx.getStorageSync('jump');
+    console.log(jumpUrl);
+
+    if (jumpUrl) {
+      wx.navigateTo({
+        url: jumpUrl,
+      })
+      return;
+    }
+
+    let flag = wx.getStorageSync('isUnbind');
+    let coachId = wx.getStorageSync('coachId');
+    let model = wx.getStorageSync('model');
 
     if (coachId && flag != 'unbind') {
       this.setData({
-        coachId: coachId
+        coachId: coachId,
+        model: model
       })
     } else {
       this.setData({
