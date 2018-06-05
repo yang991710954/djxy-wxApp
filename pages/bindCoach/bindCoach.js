@@ -1,4 +1,12 @@
 // pages/bindCoach/bindCoach.js
+import {
+  APIHOST,
+  phoneReg,
+  showMessage,
+  httpRequest,
+  returnUrlObj
+} from '../../utils/util.js';
+
 Page({
 
   /**
@@ -8,25 +16,72 @@ Page({
 
   },
 
+  //绑定教练
+  bindCoach: function (CoachId) {
+    httpRequest({
+      url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
+      data: { coachId: CoachId },
+      success: function ({ data }) {
+        if (data.result) {
+
+          wx.showToast({
+            title: '绑定教练成功',
+            icon: 'success',
+            duration: 2000
+          })
+
+          setTimeout(function () {
+            wx.switchTab({
+              url: '/pages/home/home',
+            })
+          }, 1000)
+
+        } else {
+          showMessage('绑定教练失败')
+        }
+      },
+      error: function () {
+        showMessage('绑定教练出错')
+      }
+    })
+  },
+
+  // 扫码绑定教练
   jumpScanQRPage: function () {
+    let _this = this;
     wx.scanCode({
       success: (res) => {
         console.log(res);
-        wx.showToast({
-          title: '绑定教练成功',
-          icon: 'success',
-          duration: 2000
-        })
+
+        let urlObj = returnUrlObj(res.path);
+
+        if (res.errMsg != "scanCode:ok") {
+
+          showMessage('扫码失败');
+          return;
+
+        }
+
+        if (urlObj.appid && urlObj.appid === 'student_min_app') {
+
+          let model = urlObj.model ? urlObj.model : 'from_zdpp';
+          let coachId = urlObj.coachId ? urlObj.coachId : '';
+
+          wx.setStorageSync('model', model);
+          wx.setStorageSync('coachId', coachId);
+
+          coachId && _this.bindCoach(coachId);
+
+        } else {
+
+          showMessage('错误的二维码');
+
+        }
       }
     })
-
-    setTimeout(function () {
-      wx.switchTab({
-        url: '/pages/home/home',
-      })
-    }, 2000)
   },
 
+  // 跳转手机搜索
   jumpPhoneSearch: function () {
     wx.navigateTo({
       url: '/pages/bindCoach/SearchPhone/SearchPhone',

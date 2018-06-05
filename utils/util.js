@@ -140,13 +140,13 @@ const httpRequest = (params) => {
 }
 
 // 获取URL参数
-const returnUrlObj = (ulr) => {
-  var strArr = url.replace('?', '');
+const returnUrlObj = (url) => {
+  var strArr = url.split('?')[1];
   strArr = strArr.split('&');
   var obj = {};
   for (var i in strArr) {
-    var pa = strArr[i].split('=');
-    obj['' + pa[0]] = pa[1];
+    var k = strArr[i].split('=');
+    obj['' + k[0]] = k[1];
   }
   return obj;
 }

@@ -29,3 +29,7 @@
   width: 30rpx;
   height: 30rpx;
 }
+
+page {
+  background-color: #fff;
+}

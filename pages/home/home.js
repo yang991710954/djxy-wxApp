@@ -56,26 +56,36 @@ Page({
     wx.scanCode({
       success: (res) => {
         console.log(res);
-        console.log(returnUrlObj(res))
-        if (res.errMsg == "scanCode:ok") {
+
+        let urlObj = returnUrlObj(res.path);
+
+        if (res.errMsg != "scanCode:ok") {
+
           showMessage('扫码失败');
           return;
+
         }
 
-        let model = returnUrlObj(res).model ? returnUrlObj(res).model : 'from_zdpp';
-        let coachId = returnUrlObj(res).coachId ? returnUrlObj(res).coachId : '';
+        if (urlObj.appid && urlObj.appid === 'student_min_app') {
 
-        this.setData({
-          model: model,
-          coachId: coachId
-        })
+          let model = urlObj.model ? urlObj.model : 'from_zdpp';
+          let coachId = urlObj.coachId ? urlObj.coachId : '';
 
-        wx.setStorageSync('model', model);
-        wx.setStorageSync('coachId', coachId);
+          this.setData({
+            model: model,
+            coachId: coachId
+          })
 
-        if (returnUrlObj(res).appid === 'student_min_app') {
+          wx.setStorageSync('model', model);
+          wx.setStorageSync('coachId', coachId);
+
           // 发送练车请求
           _this.sendPracticeRequest();
+
+        } else {
+
+          showMessage('错误的二维码');
+
         }
       }
     })

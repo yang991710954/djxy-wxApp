@@ -97,5 +97,9 @@
 
 .noData-container>text {
   font-size: 30rpx;
-  color: #999999;
+  color: #999;
+}
+
+page {
+  background-color: #fff;
 }
