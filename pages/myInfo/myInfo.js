@@ -1,6 +1,9 @@
-//index.js
-// //获取应用实例
-// const app = getApp()
+import {
+  APIHOST,
+  httpRequest,
+  showMessage,
+  shareMessage,
+} from '../../utils/util.js';
 
 Page({
   data: {
@@ -89,7 +92,13 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
 
+    // 分享信息
+    return shareMessage();
   }
 })

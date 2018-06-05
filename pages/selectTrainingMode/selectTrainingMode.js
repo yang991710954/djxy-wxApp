@@ -2,6 +2,8 @@
 import {
   APIHOST,
   httpRequest,
+  showMessage,
+  shareMessage,
   wxCloseAppOnError
 } from '../../utils/util.js';
 
@@ -69,7 +71,7 @@ Page({
         }
       },
       error: function () {
-        wxCloseAppOnError('练车请求失败')
+        showMessage('练车请求失败')
       }
     })
 
@@ -128,7 +130,13 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
 
+    // 分享信息
+    return shareMessage();
   }
 })

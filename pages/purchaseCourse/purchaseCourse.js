@@ -1,8 +1,10 @@
 // pages/purchaseCourse/purchaseCourse.js
 import {
   APIHOST,
+  imgList,
   httpRequest,
-  imgList
+  showMessage,
+  shareMessage,
 } from '../../utils/util.js';
 
 Page({
@@ -108,7 +110,13 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
 
+    // 分享信息
+    return shareMessage();
   }
 })

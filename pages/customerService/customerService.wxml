@@ -1,6 +1,7 @@
 <!--pages/customerService/customerService.wxml-->
 <view class="page-body">
   <view class="page-section page-section-gap">
-    <web-view src="http://q.url.cn/s/hl0TPLm?_type=wpa"></web-view>
+    <!-- <web-view src="http://q.url.cn/s/hl0TPLm?_type=wpa"></web-view>  -->
+    <web-view src="http://www.baidu.com"></web-view>
   </view>
 </view>

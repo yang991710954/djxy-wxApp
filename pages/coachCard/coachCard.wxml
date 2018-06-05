@@ -21,7 +21,7 @@
       </view>
     </view>
     <view class='qr-container'>
-      <image src='/images/qr-coach.png'></image>
+      <image src='/images/qr-coach.jpg'></image>
     </view>
   </view>
   <!-- 按钮 -->

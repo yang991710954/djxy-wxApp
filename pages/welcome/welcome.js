@@ -1,8 +1,9 @@
 // pages/welcome/welcome.js
 import {
   APIHOST,
-  showMessage,
   httpRequest,
+  showMessage,
+  shareMessage,
   wxCloseAppOnError
 } from '../../utils/util.js';
 
@@ -119,7 +120,7 @@ Page({
               if (resObj) {
                 resolve(resObj);
                 wx.setStorageSync('OPEN_ID', resObj.openid);
-                
+
                 console.log('执行完成');
               } else {
                 reject('系统错误，请稍后重试！');
@@ -254,7 +255,13 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
 
+    // 分享信息
+    return shareMessage();
   }
 })

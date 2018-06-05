@@ -164,6 +164,13 @@ const returnUrlParam = function (dataObj) {
   return urlParam;
 }
 
+const shareMessage = function () {
+  return {
+    title: '滴驾学员-滴驾共享考车系统',
+    path: '/pages/welcome/welcome?appid=student_min_app'
+  }
+}
+
 //小程序错误提示
 const wxCloseAppOnError = function (content) {
   wx.showModal({
@@ -224,6 +231,7 @@ module.exports = {
   APP_SECRET,
   wxCloseApp,
   showMessage,
+  shareMessage,
   imgList: [
     COURSES_IMGURL_01,
     COURSES_IMGURL_02,
