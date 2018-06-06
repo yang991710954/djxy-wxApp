@@ -21,11 +21,10 @@
   overflow: hidden;
   margin: 0 10rpx 0 20rpx;
   border-radius: 10rpx;
-  border: 1px solid #ebeef5;
-  box-shadow: 0 2rpx 10rpx 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1rpx 5rpx 0 rgba(0, 0, 0, 0.2);
 }
 
-.coachImgBox{
+.coachImgBox {
   width: 180rpx;
   height: 130rpx;
   border-bottom: 1px solid #ebeef5;
@@ -51,7 +50,7 @@
   height: 24rpx;
   position: absolute;
   right: 10rpx;
-  bottom: 14rpx;
+  bottom: 12rpx;
 }
 
 /* 课程信息 */
@@ -69,6 +68,7 @@
 .courseTitle-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
   margin-top: 20rpx;
   margin-bottom: 10rpx;
 }
@@ -87,15 +87,14 @@
 .courseTimeBox {
   vertical-align: middle;
   line-height: 20rpx;
+  font-size: 24rpx;
 }
 
 .courseTimeLabel {
-  font-size: 20rpx;
   color: #999;
 }
 
 .courseTime {
-  font-size: 22rpx;
   color: #19a2ff;
 }
 

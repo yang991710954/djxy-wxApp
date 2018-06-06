@@ -24,6 +24,7 @@ page {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   border-radius: 12rpx;
   position: absolute;
@@ -35,13 +36,14 @@ page {
 }
 
 .btnContent {
-  margin-top: 30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btnContent>.scanQR {
   width: 34rpx;
   height: 34rpx;
-  vertical-align: middle;
   margin-right: 20rpx;
 }
 

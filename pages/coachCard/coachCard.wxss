@@ -35,8 +35,7 @@
   margin-right: 25rpx;
   border-radius: 10rpx;
   box-sizing: border-box;
-  border: 1px solid #ebeef5;
-  box-shadow: 0 2rpx 10rpx 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1rpx 5rpx 0 rgba(0, 0, 0, 0.2);
 }
 
 .coachImg {

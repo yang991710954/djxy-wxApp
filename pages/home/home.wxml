@@ -8,13 +8,22 @@
   <view wx:if="{{isBindCoach}}" class="practiceInfo-container">
     <image class="bg-img" src='/images/background-big.png'></image>
     <template is="coachesOrCourses" data="{{coachName:coachName, courseInfo:courseInfo}}" />
+
+    <!-- 取消练车请求 -->
+    <view wx:if="{{trainState}}" class="btnBox" bindtap='cancelTrainRequest'>
+      <view class="btnContent">
+        <text>取消练车请求</text>
+      </view>
+    </view>
+
     <!-- 扫码练车 -->
-    <view class="btnBox" bindtap='onScanQR'>
+    <view wx:else class="btnBox" bindtap='onScanQR'>
       <view class="btnContent">
         <image class="scanQR" src="/images/scanQR.png"></image>
         <text>扫码练车</text>
       </view>
     </view>
+    
   </view>
 
   <!-- 未绑定教练 -->

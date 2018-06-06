@@ -14,10 +14,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    coachName: '',
-    mileageNum: '100',
-    isBindCoach: false,
-    courseInfo: {},
+    coachName: '',//教练姓名
+    coachId: '',//教练Id
+    isBindCoach: false,//是否绑定教练
+    courseInfo: {},//课程信息
     achievement: 0, //成绩
     practiceStatistics: {
       totalDistance: 0, //总里程
@@ -27,10 +27,10 @@ Page({
       examTravel: 0, //考试次数
     },
     inputName: '',//用户名
-    isShowModel: false,
-    courseFlag: true,
-    coachId: '',
-    model: '',
+    isShowModel: false,//是否显示信息补充框
+    courseFlag: true,//查询有无课程的标记
+    model: '',//练车模式1.自动播报：form_zdbb；2.自动评判：form_zdpp
+    trainState: false,//是否练车状态
   },
 
   // 扫码练车
@@ -110,6 +110,65 @@ Page({
       },
       error: function () {
         showMessage('练车请求出错');
+      }
+    })
+  },
+
+  // 取消练车请求
+  cancelTrainRequest: function () {
+    let _this = this;
+
+    wx.showModal({
+      title: '温馨提示',
+      content: '是否确定取消练车请求',
+      success: function (res) {
+        if (res.confirm) {
+          httpRequest({
+            url: APIHOST + 'api/v3/driving/driving/student/student_cancel',
+            method: 'post',
+            success: function ({ data }) {
+              let state = data.result;
+
+              // 修改练车状态
+              _this.setData({
+                trainState: state ? true : false
+              })
+
+              wx.showToast({
+                title: '取消练车成功',
+                icon: 'success',
+                duration: 2000
+              })
+
+            },
+            error: function () {
+              showMessage('取消练车失败');
+            }
+          })
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  },
+
+  // 查询练车转态
+  getTrainState: function () {
+    let _this = this;
+
+    httpRequest({
+      url: APIHOST + 'api/v3/driving/driving/student/load_student_auth',
+      success: function ({ data }) {
+        let state = data.result;
+
+        // 修改练车状态
+        _this.setData({
+          trainState: state ? true : false
+        })
+
+      },
+      error: function () {
+        showMessage('查询状态出错');
       }
     })
   },
@@ -397,6 +456,9 @@ Page({
 
                 // 获取绑定教练信息
                 _this.getCocahInfo();
+
+                // 查询练车转态
+                _this.getTrainState();
 
                 // 获取学员练车统计
                 _this.getDrivingStatistics();
