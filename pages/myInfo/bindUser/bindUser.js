@@ -19,7 +19,7 @@ Page({
     phoneNumber: '',
     verification: '',
     victoryFlag: true,
-    state: Date.now(),
+    state: wx.getStorageSync('coachId') || '',
     openId: wx.getStorageSync('OPEN_ID'),
     token: wx.getStorageSync('SESSION_KEY')
   },

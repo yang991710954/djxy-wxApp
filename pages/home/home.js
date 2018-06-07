@@ -30,7 +30,8 @@ Page({
     isShowModel: false,//是否显示信息补充框
     courseFlag: true,//查询有无课程的标记
     model: '',//练车模式1.自动播报：form_zdbb；2.自动评判：form_zdpp
-    trainState: false,//是否练车状态
+    trainState: 0,//是否练车状态
+    isLoading: true,
   },
 
   // 扫码练车
@@ -38,19 +39,17 @@ Page({
     let _this = this;
 
     if (!this.data.courseFlag) {
-      wx.showModal({
-        title: '温馨提示',
-        content: '暂无可用课程，请选择练车模式吧！',
-        success: function (res) {
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/pages/selectTrainingMode/selectTrainingMode',
-            })
-          } else if (res.cancel) {
-            console.log('用户点击取消')
-          }
-        }
-      })
+      let model = _this.data.model;
+
+      if (model === 'from_zdpp') {
+        wx.navigateTo({
+          url: '/pages/purchaseCourse/purchaseCourse',
+        })
+      } else {
+        wx.navigateTo({
+          url: '/pages/selectTrainingMode/selectTrainingMode',
+        })
+      }
       return;
     }
 
@@ -69,21 +68,23 @@ Page({
 
         if (urlObj.appid && urlObj.appid === 'student_min_app') {
 
-          let model = urlObj.model ? urlObj.model : 'from_zdpp';
+          let model = urlObj.model ? urlObj.model : '';
           let coachId = urlObj.coachId ? urlObj.coachId : '';
 
-          this.setData({
+          _this.setData({
             model: model,
             coachId: coachId
           })
 
+          wx.removeStorageSync('specialTag');
+
           wx.setStorageSync('model', model);
           wx.setStorageSync('coachId', coachId);
 
-          // 发送练车请求
-          _this.sendPracticeRequest();
-
         } else {
+          _this.setData({
+            isLoading: false
+          })
 
           showMessage('错误的二维码');
 
@@ -94,6 +95,8 @@ Page({
 
   // 发送练车请求
   sendPracticeRequest: function () {
+    let _this = this;
+
     httpRequest({
       url: APIHOST + 'api/v3/driving/driving/student/student_free_apply',
       method: 'post',
@@ -103,6 +106,10 @@ Page({
             title: '练车请求成功',
             icon: 'success',
             duration: 2000
+          })
+
+          _this.setData({
+            trainState: 1
           })
         } else {
           showMessage('练车请求失败');
@@ -120,10 +127,11 @@ Page({
 
     wx.showModal({
       title: '温馨提示',
-      content: '是否确定取消练车请求',
+      content: '确定要取消练车请求吗？',
       success: function (res) {
         if (res.confirm) {
           httpRequest({
+            loading: true,
             url: APIHOST + 'api/v3/driving/driving/student/student_cancel',
             method: 'post',
             success: function ({ data }) {
@@ -131,7 +139,7 @@ Page({
 
               // 修改练车状态
               _this.setData({
-                trainState: state ? true : false
+                trainState: state ? 0 : 1
               })
 
               wx.showToast({
@@ -208,6 +216,13 @@ Page({
     })
   },
 
+  // 关闭弹框
+  onCancel: function () {
+    this.setData({
+      isShowModel: false
+    })
+  },
+
   //保存用户名
   onConfirm: function () {
     let _this = this;
@@ -242,13 +257,6 @@ Page({
       error: function () {
         showMessage('设置失败');
       }
-    })
-  },
-
-  // 关闭弹框
-  onCancel: function () {
-    this.setData({
-      isShowModel: false
     })
   },
 
@@ -412,6 +420,74 @@ Page({
     })
   },
 
+  // 查询用户信息
+  checkingUserInfo: function (code) {
+    let _this = this;
+    let loading = this.data.isLoading;
+
+    this.setData({
+      isLoading: true
+    })
+
+    httpRequest({
+      loading: loading,
+      url: APIHOST + 'api/base/binding_checking_api/f/binding_checking_stu_min_app',
+      contentType: 'application/x-www-form-urlencoded',
+      method: 'post',
+      data: {
+        code: code,
+        state: _this.data.coachId
+      },
+      success: function ({ data }) {
+        let resObj = data.result;
+
+        console.log(resObj);
+
+        if (resObj) {
+          wx.setStorageSync('OPEN_ID', resObj.openid);
+
+          //1.1判断用户有无绑定微信,没有则跳转到登录
+          if (!resObj.bindWeixin) {
+            wx.redirectTo({
+              url: '/pages/myInfo/bindUser/bindUser',
+            })
+            return;
+          }
+
+          //1.2获取token并缓存起来
+          if (resObj.accessToken) {
+            wx.setStorageSync('SESSION_KEY', resObj.accessToken);
+
+            // 阿里OSS 获取头像
+            // this.aliOss();
+
+            // 获取学员信息
+            _this.getStudentInfo();
+
+            // 获取绑定教练信息
+            _this.getCocahInfo();
+
+            // 查询练车转态
+            _this.getTrainState();
+
+            // 获取学员练车统计
+            _this.getDrivingStatistics();
+
+          }
+
+          //do something!
+          _this.serviceLogic(resObj);
+
+        } else {
+          wxCloseAppOnError('系统错误，请稍后重试！')
+        }
+      },
+      error: function (err) {
+        wxCloseAppOnError('系统错误，请稍后重试！')
+      }
+    })
+  },
+
   // 初始化首页显示
   initHome: function () {
     let _this = this;
@@ -419,63 +495,11 @@ Page({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+
         wx.setStorageSync('CODE', res.code);
 
-        httpRequest({
-          loading: true,
-          url: APIHOST + 'api/base/binding_checking_api/f/binding_checking_stu_min_app',
-          contentType: 'application/x-www-form-urlencoded',
-          method: 'post',
-          data: {
-            code: res.code,
-            state: _this.data.coachId
-          },
-          success: function ({ data }) {
-            let resObj = data.result;
-
-            if (resObj) {
-              wx.setStorageSync('OPEN_ID', resObj.openid);
-
-              //1.1判断用户有无绑定微信,没有则跳转到登录
-              if (!resObj.bindWeixin) {
-                wx.redirectTo({
-                  url: '/pages/myInfo/bindUser/bindUser',
-                })
-                return;
-              }
-
-              //1.2获取token并缓存起来
-              if (resObj.accessToken) {
-                wx.setStorageSync('SESSION_KEY', resObj.accessToken);
-
-                // 阿里OSS 获取头像
-                // this.aliOss();
-
-                // 获取学员信息
-                _this.getStudentInfo();
-
-                // 获取绑定教练信息
-                _this.getCocahInfo();
-
-                // 查询练车转态
-                _this.getTrainState();
-
-                // 获取学员练车统计
-                _this.getDrivingStatistics();
-
-              }
-
-              //do something!
-              _this.serviceLogic(resObj);
-
-            } else {
-              wxCloseAppOnError('系统错误，请稍后重试！')
-            }
-          },
-          error: function (err) {
-            wxCloseAppOnError('系统错误，请稍后重试！')
-          }
-        })
+        // 查询用户信息
+        _this.checkingUserInfo(res.code);
       }
     })
   },
@@ -493,8 +517,15 @@ Page({
     let courseObj = courseInfo || voucherInfo;
     let hasObj = !courseInfo && !voucherInfo;
 
+    let specialTag = wx.getStorageSync('specialTag');
+
     // 保存课程信息
     _this.saveVourseInfo(courseObj);
+
+    if (specialTag === 'DonTSend') {
+      wx.removeStorageSync('specialTag');
+      return;
+    }
 
     if (coach) {
       let coachId = coach.userId;
@@ -548,7 +579,8 @@ Page({
                   }
                 })
               } else if (res.cancel) {
-                wxCloseAppOnError('您已放弃练车!')
+                showMessage('您已放弃练车')
+                // wxCloseAppOnError('您已放弃练车!')
               }
             }
           })
@@ -603,16 +635,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let jumpUrl = wx.getStorageSync('jump');
-    console.log(jumpUrl);
-
-    if (jumpUrl) {
-      wx.navigateTo({
-        url: jumpUrl,
-      })
-      return;
-    }
-
     let flag = wx.getStorageSync('isUnbind');
     let coachId = wx.getStorageSync('coachId');
     let model = wx.getStorageSync('model');
@@ -637,8 +659,10 @@ Page({
    */
   onHide: function () {
     // 移除标记
-    wx.removeStorageSync('jump');
     wx.removeStorageSync('isUnbind');
+
+    // 标记为下次进来不发送练车请求
+    wx.setStorageSync('specialTag', 'DonTSend');
   },
 
   /**

@@ -1,12 +1,12 @@
 <view class="myInfo-container">
-  <view class='myInfoBox' bindtap='amendUserImg'>
+  <view class='myInfoBox'>
     <view class='myImgBox'>
       <!-- <image src='/images/userImg.jpg'></image> -->
       <view class='userImgBox'>
         <open-data class='userImg' type="userAvatarUrl"></open-data>
       </view>
     </view>
-    <view class='myNameBox' bindtap='amendUserImg'>
+    <view class='myNameBox'>
       <!-- <text>修改头像</text> -->
       <view>
         <open-data type="userNickName"></open-data>
@@ -14,16 +14,16 @@
     </view>
     <!-- <image class='enterEdit' src='/images/enterArrow.png'></image> -->
   </view>
-  <view class='my-category'>
+  <view class='my-category inputBox'>
     <text>姓名：</text>
     <input class='input' placeholder='请填写您的姓名' value='{{inputName}}' bindinput='bindNameInput'></input>
   </view>
-  <view class='my-category' bindtap='selectSex'>
+  <view class='my-category inputBox' bindtap='selectSex'>
     <text>性别：</text>
     <input class='input' value='{{userSex}}' placeholder='请填写您的性别' disabled></input>
     <image class='enterArrow' src='/images/enterArrow.png'></image>
   </view>
-  <view class='my-category pickerBox' bindtap='selectLocation'>
+  <view class='my-category inputBox' bindtap='selectLocation'>
     <text>地区：</text>
     <picker class='picker' mode="region" bindchange="bindRegionChange" value="{{region}}">
       <view wx:if="{{region.length}}" class="pickerView">{{region[0]}}-{{region[1]}}-{{region[2]}}</view>

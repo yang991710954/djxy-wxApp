@@ -64,10 +64,14 @@
   flex-direction: row;
   position: relative;
   padding: 0 40rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .my-category>text {
   font-size: 30rpx;
+  width: 90rpx;
   line-height: 100rpx;
   color: #424242;
 }
@@ -87,11 +91,7 @@
   color: #424242;
 }
 
-.pickerBox>text {
-  width: 90rpx;
-}
-
-.pickerBox>.picker {
+.inputBox>.picker, .inputBox>.input {
   width: 540rpx;
   overflow: hidden;
 }

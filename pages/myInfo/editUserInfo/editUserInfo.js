@@ -200,9 +200,7 @@ Page({
 
           wx.setStorageSync('USER_INFO', JSON.stringify(dataObj));
 
-        } else {
-          showMessage('获取信息失败')
-        }
+        } 
       },
       error: function () {
         showMessage('获取信息出错')

@@ -1,14 +1,14 @@
 {
 	"description": "滴驾学员-微信小程序",
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.8",
+	"libVersion": "2.0.9",
 	"appid": "wx4bd4f904b42bd0a6",
 	"projectname": "djxy-wxApp",
 	"isGameTourist": false,

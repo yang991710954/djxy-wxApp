@@ -17,7 +17,8 @@ Page({
     activeUrl: '',
     countDown: 5,
     coachId: '',
-    initData: '',
+    initObj: '',
+    model: '',
     isShow: false,
     timerId: void (0),
   },
@@ -29,7 +30,6 @@ Page({
     httpRequest({
       loading: true,
       url: APIHOST + 'api/base/banner/f/load_banners_by_code',
-      // contentType: 'application/x-www-form-urlencoded',
       data: { code: 'STUSTART_V3' },
       success: function ({ data }) {
         let resObj = data.result;
@@ -48,7 +48,9 @@ Page({
 
   // 跳转页面
   jumpPage: function () {
-    let resObj = this.data.initData;
+    let _this = this;
+
+    let resObj = this.data.initObj;
 
     let courseInfo = resObj.hasCourse;
 
@@ -69,8 +71,17 @@ Page({
     }
 
     if (!courseInfo && !voucherInfo) {
-      // 设置home页跳转
-      wx.setStorageSync('jump', '/pages/selectTrainingMode/selectTrainingMode');
+      let model = _this.data.model;
+
+      if (model === 'from_zdpp') {
+        wx.redirectTo({
+          url: '/pages/purchaseCourse/purchaseCourse',
+        })
+      } else if (model === 'from_zdbb') {
+        wx.redirectTo({
+          url: '/pages/selectTrainingMode/selectTrainingMode',
+        })
+      }
     }
 
     wx.switchTab({
@@ -138,30 +149,25 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let _this = this;
+
     // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     let scene = decodeURIComponent(options.scene)
     let query = options.query || {};
 
-    let model = query.model ? query.model : 'from_zdpp';
-    let coachId = query.coachId ? query.coachId : '';
+    let model = query.model ? query.model : '';
+    let coachId = query.coachId ? query.coachId : '8208';
 
     this.setData({
       model: model,
       coachId: coachId
     })
 
-    wx.setStorageSync('model', model);
-    wx.setStorageSync('coachId', coachId);
-
     // 获取首页图片
     this.getActiveImg();
-  },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    let _this = this;
+    wx.setStorageSync('model', model);
+    wx.setStorageSync('coachId', coachId);
 
     // 初始化数据
     this.initData()
@@ -169,7 +175,7 @@ Page({
         let resObj = data;
 
         _this.setData({
-          initData: resObj,
+          initObj: resObj,
           isShow: true
         })
 
@@ -190,8 +196,17 @@ Page({
           }
 
           if (!courseInfo && !voucherInfo) {
-            // 设置home页跳转
-            wx.setStorageSync('jump', '/pages/selectTrainingMode/selectTrainingMode');
+            let model = _this.data.model;
+
+            if (model === 'from_zdpp') {
+              wx.redirectTo({
+                url: '/pages/purchaseCourse/purchaseCourse',
+              })
+            } else if (model === 'from_zdbb') {
+              wx.redirectTo({
+                url: '/pages/selectTrainingMode/selectTrainingMode',
+              })
+            }
           }
 
           wx.switchTab({
@@ -214,6 +229,13 @@ Page({
         wxCloseAppOnError('系统错误，请稍后重试！')
 
       });
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
   },
 
   /**

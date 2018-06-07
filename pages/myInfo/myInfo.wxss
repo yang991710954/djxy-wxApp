@@ -43,6 +43,10 @@
 .myNameBox>text {
   color: #424242;
   font-size: 36rpx;
+  width: 390rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .enterEdit {
