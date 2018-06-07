@@ -6,9 +6,13 @@
     <block wx:for="{{orderList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
       <template is='courseRecordTemplate' data="{{...item}}" />
     </block>
+
+    <view class='noMore'>
+      <text>没有更多数据了</text>
+    </view>
   </view>
 
   <view wx:else>
-    <template is='blankTemplate' data="{{annotation}}"/>
+    <template is='blankTemplate' data="{{annotation}}" />
   </view>
 </view>

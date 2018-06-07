@@ -18,7 +18,7 @@ Page({
     userName: '匿名',
     recordParams: {
       pageNum: 1,
-      pageSize: 5
+      pageSize: 0
     },
     recordList: [],
     recordArr: [],
@@ -63,7 +63,7 @@ Page({
         currentItem: 'line_record_stage',
         recordParams: {
           pageNum: 1,
-          pageSize: 5
+          pageSize: 0
         }
       })
     }
@@ -131,7 +131,7 @@ Page({
             average: parseInt((totalNum / trainList.length + _this.data.average) / 2) || 0,
             recordParams: {
               pageNum: _this.data.recordParams.pageNum + 1,
-              pageSize: 5
+              pageSize: 0
             },
           })
         } else {
@@ -165,7 +165,7 @@ Page({
       recordList: [],
       recordParams: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 0
       },
     })
     // 获取条件查询结果
@@ -234,7 +234,7 @@ Page({
             average: parseInt((totalNum / trainList.length + _this.data.average) / 2) || 0,
             recordParams: {
               pageNum: _this.data.recordParams.pageNum + 1,
-              pageSize: 5
+              pageSize: 0
             },
           })
         } else {
@@ -297,7 +297,7 @@ Page({
     this.setData({
       recordParams: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 0
       },
     })
     // 获取练车记录
@@ -308,13 +308,13 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    if (this.data.currentItem == 'line_record') {
-      // 获取练车记录
-      this.getPracticeResults();
-    } else {
-      // 按条件查询
-      this.conditionQuery();
-    }
+    // if (this.data.currentItem == 'line_record') {
+    //   // 获取练车记录
+    //   this.getPracticeResults();
+    // } else {
+    //   // 按条件查询
+    //   this.conditionQuery();
+    // }
   },
 
   /**

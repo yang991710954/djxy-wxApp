@@ -156,7 +156,7 @@ Page({
     let query = options.query || {};
 
     let model = query.model ? query.model : '';
-    let coachId = query.coachId ? query.coachId : '8208';
+    let coachId = query.coachId ? query.coachId : '';
 
     this.setData({
       model: model,

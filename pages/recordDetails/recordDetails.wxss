@@ -16,6 +16,10 @@ page {
   margin-bottom: 10rpx;
 }
 
+.statistic-container text {
+  font-size: 30rpx;
+}
+
 .statistic-item {
   flex: 1;
   text-align: center;
@@ -37,13 +41,24 @@ page {
   color: #19a2ff;
 }
 
-.statistic-titleBox{
+.statistic-titleBox {
   background-color: #f4fbff;
   height: 60rpx;
   padding-left: 30rpx;
 }
 
-.statistic-titleBox>text{
-  font-size: 30rpx;
+.statistic-titleBox>text {
+  font-size: 32rpx;
   line-height: 60rpx;
+}
+
+.noMore {
+  width: 100%;
+  text-align: center;
+  margin-top: 10rpx;
+  margin-bottom: 30rpx;
+}
+
+.noMore>text {
+  font-size: 28rpx;
 }

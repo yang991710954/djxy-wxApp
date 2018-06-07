@@ -106,3 +106,14 @@
   overflow: hidden;
   overflow-y: auto;
 } */
+
+.noMore {
+  width: 100%;
+  text-align: center;
+  margin-top: 10rpx;
+  margin-bottom: 30rpx;
+}
+
+.noMore>text {
+  font-size: 28rpx;
+}

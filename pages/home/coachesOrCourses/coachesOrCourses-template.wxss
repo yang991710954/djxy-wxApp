@@ -36,9 +36,18 @@
   display: block;
 }
 
+.coachBox {
+  width: 180rpx;
+  height: 50rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
 .coachName {
-  display: inline-block;
   width: 110rpx;
+  text-align: center;
   font-size: 26rpx;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -48,9 +57,7 @@
 .coachJump {
   width: 24rpx;
   height: 24rpx;
-  position: absolute;
-  right: 10rpx;
-  bottom: 12rpx;
+  margin-left: 10rpx;
 }
 
 /* 课程信息 */

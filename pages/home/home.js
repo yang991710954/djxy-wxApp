@@ -98,7 +98,7 @@ Page({
     let _this = this;
 
     httpRequest({
-      url: APIHOST + 'api/v3/driving/driving/student/student_free_apply',
+      url: APIHOST + 'api/v3/driving/driving/student/student_apply',
       method: 'post',
       success: function ({ data }) {
         if (data.result) {
@@ -130,32 +130,42 @@ Page({
       content: '确定要取消练车请求吗？',
       success: function (res) {
         if (res.confirm) {
-          httpRequest({
-            loading: true,
-            url: APIHOST + 'api/v3/driving/driving/student/student_cancel',
-            method: 'post',
-            success: function ({ data }) {
-              let state = data.result;
 
-              // 修改练车状态
-              _this.setData({
-                trainState: state ? 0 : 1
-              })
+          // 结束(取消)练车
+          _this.endPractice();
 
-              wx.showToast({
-                title: '取消练车成功',
-                icon: 'success',
-                duration: 2000
-              })
-
-            },
-            error: function () {
-              showMessage('取消练车失败');
-            }
-          })
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
+      }
+    })
+  },
+
+  // 结束(取消)练车
+  endPractice: function () {
+    let _this = this;
+
+    httpRequest({
+      loading: true,
+      url: APIHOST + 'api/v3/driving/driving/student/student_cancel',
+      method: 'post',
+      success: function ({ data }) {
+        let state = data.result;
+
+        // 修改练车状态
+        _this.setData({
+          trainState: state ? 0 : 1
+        })
+
+        wx.showToast({
+          title: '取消练车成功',
+          icon: 'success',
+          duration: 2000
+        })
+
+      },
+      error: function () {
+        showMessage('取消练车失败');
       }
     })
   },
@@ -171,7 +181,7 @@ Page({
 
         // 修改练车状态
         _this.setData({
-          trainState: state ? true : false
+          trainState: state ? 1 : 0
         })
 
       },
@@ -392,6 +402,13 @@ Page({
           })
 
           wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
+          
+        } else {
+
+          _this.setData({
+            isBindCoach: false
+          })
+
         }
       },
       error: function () {
@@ -568,8 +585,13 @@ Page({
                   url: APIHOST + '/api/v3/driving/driving/student/unbind_coach',
                   success: function ({ data }) {
                     if (data.result) {
+
+                      // 结束(取消)练车
+                      _this.endPractice();
+
                       //绑定教练
                       _this.bindCoach(newCoachId);
+
                     } else {
                       showMessage('解绑教练失败')
                     }

@@ -192,7 +192,7 @@ page {
 
 .timeMileage-container {
   position: absolute;
-  top: 80rpx;
+  top: 85rpx;
   left: 370rpx;
   z-index: 1000;
 }

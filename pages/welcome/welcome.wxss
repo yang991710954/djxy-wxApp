@@ -24,6 +24,7 @@ page {
   line-height: 30rpx;
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 10rpx;
   border-radius: 30rpx;
   background-color: rgba(0, 0, 0, 0.9);
@@ -33,13 +34,13 @@ page {
   color: #fff;
   font-size: 24rpx;
   padding: 0 10rpx;
+  margin-top: 1px;
 }
 
-.jumpBox>view:nth-child(1) {
-  border-right: 1px solid #fff;
+.jumpBox>text {
+  width: 1px;
   height: 20rpx;
-  margin-top: 5rpx;
-  line-height: 20rpx;
+  background-color: #fff;
 }
 
 .logoStyle {

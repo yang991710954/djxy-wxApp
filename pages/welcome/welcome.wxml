@@ -2,6 +2,7 @@
 <view class="container">
   <view wx:if="{{isShow}}" class="jumpBox" bindtap='jumpPage'>
     <view>{{countDown}}</view>
+    <text></text>
     <view>跳过</view>
   </view>
   <image wx:if="{{activeUrl}}" class="activeImg" src="{{activeUrl}}"></image>
