@@ -58,6 +58,10 @@ Page({
   conditionQuery: function () {
     let _this = this;
 
+    _this.setData({
+      recordArr: []
+    })
+
     if (this.data.currentItem == 'line_record') {
       this.setData({
         currentItem: 'line_record_stage',
@@ -128,7 +132,7 @@ Page({
           // 设置数据
           _this.setData({
             recordList: _this.data.recordArr,
-            average: parseInt((totalNum / trainList.length + _this.data.average) / 2) || 0,
+            average: parseInt(totalNum / trainList.length) || 0,
             recordParams: {
               pageNum: _this.data.recordParams.pageNum + 1,
               pageSize: 0
@@ -136,7 +140,8 @@ Page({
           })
         } else {
           _this.setData({
-            isQueryShow: false
+            isQueryShow: false,
+            average: 0
           })
         }
       },
@@ -231,7 +236,7 @@ Page({
           // 设置数据
           _this.setData({
             recordList: _this.data.recordArr,
-            average: parseInt((totalNum / trainList.length + _this.data.average) / 2) || 0,
+            average: parseInt(totalNum / trainList.length) || 0,
             recordParams: {
               pageNum: _this.data.recordParams.pageNum + 1,
               pageSize: 0

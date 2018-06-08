@@ -1,23 +1,17 @@
 <view class='selectModel-container'>
   <view class='modelBox'>
     <view class="modeItem">
-      <image class='modelImg' bindtap='autoJudge' mode='aspectFit' src='/images/autoJudge.png'></image>
-      <view class='modelMark'>
-        <text>选择自动播报模式练车</text>
-        <text>使用考车100%功能</text>
-      </view>
+      <image class='modelImg' bindtap='autoJudge' mode='aspectFit' src='/images/new_ui/autoJudge.png'></image>
     </view>
 
     <view class="modeItem">
-      <image class='modelImg' bindtap='autoBroadcast' mode='aspectFit' src='/images/autoBroadcast.png'></image>
-      <view class='modelMark'>
-        <text>选择自动播报模式练车</text>
-        <text>使用考车10%功能</text>
-      </view>
+      <image class='modelImg' bindtap='autoBroadcast' mode='aspectFit' src='/images/new_ui/autoBroadcast.png'></image>
     </view>
   </view>
 
   <view class="practiceBox">
-    <image mode='aspectFit' src="/images/practiceCarShow.png"></image>
+    <image class='practiceBoxImg' mode='aspectFit' src="/images/new_ui/practiceCarShow.png"></image>
   </view>
 </view>
+
+<image class='page_bg' src="/images/new_ui/selectModel_bg.png"></image>

@@ -68,6 +68,8 @@ Page({
           let model = urlObj.model ? urlObj.model : 'from_zdpp';
           let coachId = urlObj.coachId ? urlObj.coachId : '';
 
+          console.log('coachId: ' + coachId);
+
           wx.setStorageSync('model', model);
           wx.setStorageSync('coachId', coachId);
 

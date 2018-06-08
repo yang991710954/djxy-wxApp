@@ -108,6 +108,7 @@ const httpRequest = (params) => {
 
   if (params.loading) {
     wx.showLoading({
+      mask: true,
       title: '加载中',
     })
   }

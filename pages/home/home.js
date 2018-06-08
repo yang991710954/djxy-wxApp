@@ -152,6 +152,8 @@ Page({
       success: function ({ data }) {
         let state = data.result;
 
+        console.log('结束练车: ' + state);
+
         // 修改练车状态
         _this.setData({
           trainState: state ? 0 : 1
@@ -353,7 +355,7 @@ Page({
   },
 
   //绑定教练
-  bindCoach: function (newCoachId) {
+  bindCoach: function (newCoachId, courseObj) {
     let _this = this;
 
     httpRequest({
@@ -371,10 +373,10 @@ Page({
             duration: 2000
           })
 
-          // 标记为无课程
-          _this.setData({
-            courseFlag: false
-          })
+          if (courseObj) {
+            // 发送练车请求
+            _this.sendPracticeRequest();
+          }
 
         } else {
           showMessage('绑定教练失败')
@@ -402,7 +404,7 @@ Page({
           })
 
           wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
-          
+
         } else {
 
           _this.setData({
@@ -586,11 +588,11 @@ Page({
                   success: function ({ data }) {
                     if (data.result) {
 
-                      // 结束(取消)练车
-                      _this.endPractice();
-
                       //绑定教练
-                      _this.bindCoach(newCoachId);
+                      _this.bindCoach(newCoachId, courseObj);
+
+                      // 保存课程信息
+                      _this.saveVourseInfo(voucherInfo);
 
                     } else {
                       showMessage('解绑教练失败')
@@ -602,7 +604,6 @@ Page({
                 })
               } else if (res.cancel) {
                 showMessage('您已放弃练车')
-                // wxCloseAppOnError('您已放弃练车!')
               }
             }
           })

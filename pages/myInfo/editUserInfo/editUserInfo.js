@@ -189,7 +189,7 @@ Page({
         let dataObj = data.result;
 
         if (dataObj && dataObj.id) {
-          let location = dataObj.location.split('-');
+          let location = dataObj.location ? dataObj.location.split('-') : [];
           let userSex = _this.returnUnValue(dataObj.sex);
 
           _this.setData({
@@ -200,7 +200,7 @@ Page({
 
           wx.setStorageSync('USER_INFO', JSON.stringify(dataObj));
 
-        } 
+        }
       },
       error: function () {
         showMessage('获取信息出错')

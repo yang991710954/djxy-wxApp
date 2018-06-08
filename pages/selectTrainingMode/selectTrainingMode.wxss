@@ -10,19 +10,30 @@
   flex-direction: row;
   align-items: center;
   margin-top: 50rpx;
+  width: 100%;
 }
 
 .modeItem {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  text-align: center;
+  justify-content: center;
 }
 
 .modeItem>.modelImg {
-  width: 300rpx;
+  width: 100%;
   height: 200rpx;
-  margin: 30rpx;
+  /* margin: 30rpx; */
+  justify-content: center;
+}
+
+.modeItem:nth-child(1)>.modelImg {
+  /* margin-right: 15rpx; */
+  margin-left: 7rpx;
+}
+
+.modeItem:nth-child(2)>.modelImg {
+  /* margin-left: 15rpx; */
+  margin-right: 7rpx;
 }
 
 .modelMark>text {
@@ -39,9 +50,24 @@
 }
 
 .practiceBox {
-  margin-top: 40rpx;
+  margin-top: -60rpx;
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 
-page{
-  background-color: #ffffff;
+.practiceBoxImg {
+  width: 100%;
+  padding: 0 30rpx;
+}
+
+.page_bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
 }

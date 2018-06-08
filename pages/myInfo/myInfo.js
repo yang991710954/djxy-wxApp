@@ -24,9 +24,13 @@ Page({
 
   // 联系客服
   contactCustomerService: function () {
-    wx.navigateTo({
-      url: '/pages/customerService/customerService',
+    wx.makePhoneCall({
+      phoneNumber: '0731-89579365'
     })
+
+    // wx.navigateTo({
+    //   url: '/pages/customerService/customerService',
+    // })
   },
 
   //事件处理函数
