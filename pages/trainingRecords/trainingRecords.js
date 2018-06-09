@@ -26,7 +26,7 @@ Page({
     isQueryShow: true,
     isPracticeShow: true,
     currentItem: 'line_record',
-    annotation: '当前还没有练车记录'
+    annotation: '未查询到练车记录'
   },
 
   // 修改起始时间

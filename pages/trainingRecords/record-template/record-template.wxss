@@ -62,3 +62,17 @@
   vertical-align: middle;
   margin-left: 25rpx;
 }
+
+/* 嵌套情况 */
+.nested>.blank-container { 
+  padding-top: 200rpx;
+}
+
+.nested>.blank-container>.nodataImg {
+  width: 200rpx;
+  margin-bottom: 20rpx;
+}
+
+.nested>.blank-container>.nodataTxt{
+  font-size: 32rpx;
+}

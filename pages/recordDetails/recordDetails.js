@@ -18,7 +18,7 @@ Page({
     Distance: 0,//里程
     totalScore: 0,//得分
     pointsRecordList: [],//扣分记录
-    annotation: '当前没有扣分记录'
+    annotation: '未查询到扣分记录'
   },
 
   // 获取练车成绩
@@ -26,6 +26,7 @@ Page({
     let _this = this;
 
     httpRequest({
+      loading: true,
       url: APIHOST + 'api/v3/driving/driving/line_use_api/f/load_line_use',
       data: data,
       success: function ({ data }) {
@@ -68,6 +69,7 @@ Page({
     let _this = this;
 
     httpRequest({
+      loading: true,
       url: APIHOST + 'api/v3/driving/driving/line_use_api/f/line_use_detail',
       data: data,
       success: function ({ data }) {

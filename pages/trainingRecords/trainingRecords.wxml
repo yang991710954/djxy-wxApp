@@ -46,13 +46,13 @@
         <block wx:for="{{recordList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
           <template is='recordTemplate' data="{{...item}}" />
         </block>
-        
+
         <view class='noMore'>
           <text>没有更多数据了</text>
         </view>
       </view>
 
-      <view wx:else>
+      <view wx:else class='nested'>
         <template is='blankTemplate' data="{{annotation}}" />
       </view>
     </view>

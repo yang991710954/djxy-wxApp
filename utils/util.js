@@ -214,8 +214,8 @@ const LOCAL_ID = '192.168.1.7';
 
 
 // 环境配置
-const APIHOST = "https://dev.yirenzn.com/"; // test
-// const APIHOST = "https://pre.yirenzn.com/"; // stage
+// const APIHOST = "https://dev.yirenzn.com/"; // test
+const APIHOST = "https://pre.yirenzn.com/"; // stage
 // const APIHOST = "https://api.dj23.cn/"; // production
 
 // 课程图片地址
