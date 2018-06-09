@@ -18,7 +18,7 @@
       <text>教练：{{coachName}}</text>
       <text>得分：{{totalScore}}</text>
       <view bindtap='jumpRecordDetails' data-user-id="{{userId}}" data-index="{{itemIndex}}">
-        <text>查看详情</text>
+        <text class="lookOver">查看详情</text>
         <image class='enterArrow' src='/images/enterArrow.png'></image>
       </view>
     </view>

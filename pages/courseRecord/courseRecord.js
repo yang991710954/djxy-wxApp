@@ -44,7 +44,7 @@ Page({
         })
       },
       error: function (err) {
-        console.log(err)
+        showMessage('查询记录失败')
       }
     })
   },

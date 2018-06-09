@@ -527,6 +527,8 @@ Page({
   serviceLogic: function (resObj) {
     let _this = this;
 
+    console.log('serviceLogic')
+
     let coach = resObj.coach;
     let currentCoach = resObj.newCoach;
 
@@ -540,6 +542,9 @@ Page({
 
     // 保存课程信息
     _this.saveVourseInfo(courseObj);
+
+    console.log('specialTag: ' + specialTag)
+    console.log(specialTag === 'DonTSend')
 
     if (specialTag === 'DonTSend') {
       wx.removeStorageSync('specialTag');
@@ -561,17 +566,8 @@ Page({
       // 对比当前扫码教练和老教练
       if (coachId != newCoachId) { //不是同一个教练
 
-        if (courseObj) {
-
-          // 重新绑定关系
-          UnbundlingRelationship();
-
-        } else {
-
-          //绑定教练
-          _this.bindCoach(newCoachId);
-
-        }
+        // 重新绑定关系
+        UnbundlingRelationship();
 
         // 解绑老教练绑定新教练
         function UnbundlingRelationship() {
@@ -692,7 +688,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    wx.removeStorageSync('specialTag');
   },
 
   /**

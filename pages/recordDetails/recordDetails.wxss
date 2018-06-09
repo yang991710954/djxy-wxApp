@@ -18,6 +18,7 @@ page {
 
 .statistic-container text {
   font-size: 30rpx;
+  font-weight: bold;
 }
 
 .statistic-item {

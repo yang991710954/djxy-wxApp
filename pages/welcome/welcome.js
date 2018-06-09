@@ -52,9 +52,14 @@ Page({
 
     let resObj = this.data.initObj;
 
-    let courseInfo = resObj.hasCourse;
+    let coach = resObj.coach;
+    let currentCoach = resObj.newCoach;
 
+    let courseInfo = resObj.hasCourse;
     let voucherInfo = resObj.hasVoucher;
+
+    let courseObj = courseInfo || voucherInfo;
+    let hasObj = !courseInfo && !voucherInfo;
 
     clearInterval(this.data.timerId);
 
@@ -70,23 +75,96 @@ Page({
       return;
     }
 
-    if (!courseInfo && !voucherInfo) {
-      let model = _this.data.model;
-
-      if (model === 'from_zdpp') {
-        wx.redirectTo({
-          url: '/pages/purchaseCourse/purchaseCourse',
-        })
-      } else if (model === 'from_zdbb') {
-        wx.redirectTo({
-          url: '/pages/selectTrainingMode/selectTrainingMode',
-        })
-      }
+    // 没有当前扫码教练
+    if (!currentCoach) {
+      wx.switchTab({
+        url: '/pages/home/home',
+      })
+      return;
     }
 
-    wx.switchTab({
-      url: '/pages/home/home',
-    })
+    let newCoach = resObj.newCoach;
+    let newCoachId = newCoach.coachId;
+    let model = _this.data.model;
+
+    // 有老教练
+    if (coach) {
+      let coachId = coach.userId;
+      let coachName = coach.name;
+
+      // 对比当前扫码教练和老教练
+      if (coachId != newCoachId) { //不是同一个教练
+        wx.switchTab({
+          url: '/pages/home/home',
+        })
+        return;
+
+      } else {
+
+        if (courseObj) {
+          wx.switchTab({
+            url: '/pages/home/home',
+          })
+          return;
+        }
+
+        if (model === 'from_zdpp') {
+          wx.redirectTo({
+            url: '/pages/purchaseCourse/purchaseCourse',
+          })
+        } else if (model === 'from_zdbb') {
+          wx.redirectTo({
+            url: '/pages/selectTrainingMode/selectTrainingMode',
+          })
+        } else {
+          wx.switchTab({
+            url: '/pages/home/home',
+          })
+        }
+
+      }
+    } else {
+      // 绑定教练
+      httpRequest({
+        url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
+        data: { coachId: newCoachId },
+        success: function ({ data }) {
+
+          console.log(data.result);
+
+          if (data.result) {
+
+            if (voucherInfo) {
+              wx.switchTab({
+                url: '/pages/home/home',
+              })
+
+            } else {
+
+              if (model === 'from_zdpp') {
+                wx.redirectTo({
+                  url: '/pages/purchaseCourse/purchaseCourse',
+                })
+              } else if (model === 'from_zdbb') {
+                wx.redirectTo({
+                  url: '/pages/selectTrainingMode/selectTrainingMode',
+                })
+              } else {
+                wx.switchTab({
+                  url: '/pages/home/home',
+                })
+              }
+
+            }
+          } else {
+            showMessage('绑定教练失败')
+          }
+        },
+        error: function () {
+          showMessage('绑定教练出错')
+        }
+      })
+    }
 
   },
 
@@ -145,6 +223,11 @@ Page({
     return PromiseObj;
   },
 
+  // 页面跳转逻辑
+  JumpLogic: function () {
+
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -152,11 +235,14 @@ Page({
     let _this = this;
 
     // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
-    let scene = decodeURIComponent(options.scene)
-    let query = options.query || {};
+    // let scene = decodeURIComponent(options.scene)
+    // let query = options.query || {};
 
-    let model = query.model ? query.model : '';
-    let coachId = query.coachId ? query.coachId : '';
+    let model = options.model ? options.model : '';
+    let coachId = options.coachId ? options.coachId : '';
+
+    console.log('model: ' + model);
+    console.log('coachId: ' + coachId);
 
     this.setData({
       model: model,
@@ -179,8 +265,14 @@ Page({
           isShow: true
         })
 
+        let coach = resObj.coach;
+        let currentCoach = resObj.newCoach;
+
         let courseInfo = resObj.hasCourse;
         let voucherInfo = resObj.hasVoucher;
+
+        let courseObj = courseInfo || voucherInfo;
+        let hasObj = !courseInfo && !voucherInfo;
 
         _this.setTimer(function () {
           _this.setData({
@@ -195,23 +287,96 @@ Page({
             return;
           }
 
-          if (!courseInfo && !voucherInfo) {
-            let model = _this.data.model;
-
-            if (model === 'from_zdpp') {
-              wx.redirectTo({
-                url: '/pages/purchaseCourse/purchaseCourse',
-              })
-            } else if (model === 'from_zdbb') {
-              wx.redirectTo({
-                url: '/pages/selectTrainingMode/selectTrainingMode',
-              })
-            }
+          // 没有当前扫码教练
+          if (!currentCoach) {
+            wx.switchTab({
+              url: '/pages/home/home',
+            })
+            return;
           }
 
-          wx.switchTab({
-            url: '/pages/home/home',
-          })
+          let newCoach = resObj.newCoach;
+          let newCoachId = newCoach.coachId;
+          let model = _this.data.model;
+
+          // 有老教练
+          if (coach) {
+            let coachId = coach.userId;
+            let coachName = coach.name;
+
+            // 对比当前扫码教练和老教练
+            if (coachId != newCoachId) { //不是同一个教练
+              wx.switchTab({
+                url: '/pages/home/home',
+              })
+              return;
+
+            } else {
+
+              if (courseObj) {
+                wx.switchTab({
+                  url: '/pages/home/home',
+                })
+                return;
+              }
+
+              if (model === 'from_zdpp') {
+                wx.redirectTo({
+                  url: '/pages/purchaseCourse/purchaseCourse',
+                })
+              } else if (model === 'from_zdbb') {
+                wx.redirectTo({
+                  url: '/pages/selectTrainingMode/selectTrainingMode',
+                })
+              } else {
+                wx.switchTab({
+                  url: '/pages/home/home',
+                })
+              }
+
+            }
+          } else {
+            // 绑定教练
+            httpRequest({
+              url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
+              data: { coachId: newCoachId },
+              success: function ({ data }) {
+
+                console.log(data.result);
+
+                if (data.result) {
+
+                  if (voucherInfo) {
+                    wx.switchTab({
+                      url: '/pages/home/home',
+                    })
+
+                  } else {
+
+                    if (model === 'from_zdpp') {
+                      wx.redirectTo({
+                        url: '/pages/purchaseCourse/purchaseCourse',
+                      })
+                    } else if (model === 'from_zdbb') {
+                      wx.redirectTo({
+                        url: '/pages/selectTrainingMode/selectTrainingMode',
+                      })
+                    } else {
+                      wx.switchTab({
+                        url: '/pages/home/home',
+                      })
+                    }
+
+                  }
+                } else {
+                  showMessage('绑定教练失败')
+                }
+              },
+              error: function () {
+                showMessage('绑定教练出错')
+              }
+            })
+          }
 
         });
 
@@ -244,6 +409,7 @@ Page({
   onShow: function () {
     // 移除标记
     wx.removeStorageSync('isUnbind');
+    wx.removeStorageSync('specialTag');
   },
 
   /**
