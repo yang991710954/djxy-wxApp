@@ -31,47 +31,55 @@ Page({
 
   // 自动播报
   autoBroadcast: function () {
-    // 发送练车请求
-    httpRequest({
-      url: APIHOST + 'api/v3/driving/driving/student/student_free_apply',
-      contentType: 'application/x-www-form-urlencoded',
-      method: 'post',
-      success: function ({ data }) {
-        if (data.result) {
-          wx.showModal({
-            title: '温馨提示',
-            content: '自动播报练车请求成功，请做好练车准备！',
-            success: function (res) {
-              if (res.confirm) {
+    wx.showModal({
+      title: '温馨提示',
+      content: '确定要发起自动播报练车请求吗？',
+      success: function (res) {
+        if (res.confirm) {
+          // 发送练车请求
+          httpRequest({
+            url: APIHOST + 'api/v3/driving/driving/student/student_free_apply',
+            contentType: 'application/x-www-form-urlencoded',
+            method: 'post',
+            success: function ({ data }) {
+              if (data.result) {
                 wx.vibrateShort({
                   success: function () {
+                    wx.showToast({
+                      title: '发送请求成功',
+                      icon: 'success',
+                      duration: 2000
+                    })
+
+                    wx.setStorageSync('backtrack', 'backtrack');
+
                     setTimeout(function () {
                       wx.switchTab({
                         url: '/pages/home/home',
                       })
-                    }, 500)
+                    }, 1000)
+                  }
+                })
+              } else {
+                wx.showModal({
+                  title: '温馨提示',
+                  content: '练车请求失败',
+                  showCancel: false,
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.switchTab({
+                        url: '/pages/home/home',
+                      })
+                    }
                   }
                 })
               }
-            }
-          })
-        } else {
-          wx.showModal({
-            title: '温馨提示',
-            content: '练车请求失败，请返回之后再试一次！',
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.switchTab({
-                  url: '/pages/home/home',
-                })
-              }
+            },
+            error: function () {
+              showMessage('网络请求错误')
             }
           })
         }
-      },
-      error: function () {
-        showMessage('练车请求失败')
       }
     })
   },

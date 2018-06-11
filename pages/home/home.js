@@ -38,6 +38,8 @@ Page({
   onScanQR: function () {
     let _this = this;
 
+    wx.setStorageSync('isScanQR', 'ScanQR');
+
     // 二维码地址示例：pages/welcome/welcome?appid=student_min_app&coachId=9328&model=from_zdpp
     wx.scanCode({
       success: (res) => {
@@ -516,8 +518,6 @@ Page({
   JumpModel: function () {
     let model = this.data.model;
 
-    wx.removeStorageSync('backtrack');
-
     if (model === 'from_zdpp') {
       wx.navigateTo({
         url: '/pages/purchaseCourse/purchaseCourse',
@@ -614,16 +614,23 @@ Page({
         //3.判断有无课程及跳转(判断是否来自微信公众号)
         if (hasObj) {
           let backtrack = wx.getStorageSync('backtrack');
+          let ScanQR = wx.getStorageSync('isScanQR');
 
           // 标记为无课程
           _this.setData({
             courseFlag: false
           })
 
-          if (backtrack) {
+          console.log('backtrack: ' + backtrack);
+          console.log('ScanQR: ' + ScanQR);
+
+          if (!backtrack || ScanQR) {
             // 跳转逻辑
             _this.JumpModel();
           }
+
+          wx.removeStorageSync('backtrack');
+          wx.removeStorageSync('isScanQR');
 
         } else {
           // 发送练车请求

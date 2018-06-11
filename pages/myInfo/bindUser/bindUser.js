@@ -171,7 +171,10 @@ Page({
       },
       contentType: 'application/x-www-form-urlencoded',
       success: function ({ data }) {
+        console.log('stu_min_app_register')
         console.log(data)
+        console.log('stu_min_app_register')
+
         //短信码错误停止运行
         if (data.error) {
           wx.showToast({
@@ -198,7 +201,10 @@ Page({
           method: 'post',
           success: function ({ data }) {
             let resData = data.result;
+            console.log('get_auth_token')
             console.log(resData)
+            console.log('get_auth_token')
+
             if (!resData) {
               wx.showToast({
                 title: '获取token失败',
