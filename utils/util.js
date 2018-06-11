@@ -142,6 +142,9 @@ const httpRequest = (params) => {
 
 // 获取URL参数
 const returnUrlObj = (url) => {
+  if(!url){
+    return {};
+  }
   var strArr = url.split('?')[1];
   strArr = strArr.split('&');
   var obj = {};

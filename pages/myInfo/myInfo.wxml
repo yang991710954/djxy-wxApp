@@ -8,7 +8,7 @@
       </view>
     </view>
     <view class='myNameBox'>
-      <text>学员：{{userName}}</text>
+      <text>学员：{{userName || '匿名'}}</text>
     </view>
     <image class='enterEdit' src='/images/enterArrow.png'></image>
   </view>

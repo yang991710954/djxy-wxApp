@@ -14,7 +14,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    coachName: '',//教练姓名
+    coachName: '滴驾教练',//教练姓名
     coachId: '',//教练Id
     isBindCoach: false,//是否绑定教练
     courseInfo: {},//课程信息
@@ -38,21 +38,7 @@ Page({
   onScanQR: function () {
     let _this = this;
 
-    if (!this.data.courseFlag) {
-      let model = _this.data.model;
-
-      if (model === 'from_zdpp') {
-        wx.navigateTo({
-          url: '/pages/purchaseCourse/purchaseCourse',
-        })
-      } else {
-        wx.navigateTo({
-          url: '/pages/selectTrainingMode/selectTrainingMode',
-        })
-      }
-      return;
-    }
-
+    // 二维码地址示例：pages/welcome/welcome?appid=student_min_app&coachId=9328&model=from_zdpp
     wx.scanCode({
       success: (res) => {
         console.log(res);
@@ -61,9 +47,11 @@ Page({
 
         if (res.errMsg != "scanCode:ok") {
 
+          _this.setData({
+            isLoading: false
+          })
           showMessage('扫码失败');
           return;
-
         }
 
         if (urlObj.appid && urlObj.appid === 'student_min_app') {
@@ -85,9 +73,7 @@ Page({
           _this.setData({
             isLoading: false
           })
-
-          showMessage('错误的二维码');
-
+          showMessage('无效的二维码');
         }
       }
     })
@@ -376,6 +362,9 @@ Page({
           if (courseObj) {
             // 发送练车请求
             _this.sendPracticeRequest();
+          } else {
+            // 跳转逻辑
+            _this.JumpModel();
           }
 
         } else {
@@ -400,7 +389,7 @@ Page({
 
           _this.setData({
             isBindCoach: true,
-            coachName: dataObj.name
+            coachName: dataObj.name || dataObj.phone
           })
 
           wx.setStorageSync('COACH_INFO', JSON.stringify(dataObj));
@@ -523,6 +512,23 @@ Page({
     })
   },
 
+  // 跳转逻辑
+  JumpModel: function () {
+    let model = this.data.model;
+
+    wx.removeStorageSync('backtrack');
+
+    if (model === 'from_zdpp') {
+      wx.navigateTo({
+        url: '/pages/purchaseCourse/purchaseCourse',
+      })
+    } else {
+      wx.navigateTo({
+        url: '/pages/selectTrainingMode/selectTrainingMode',
+      })
+    }
+  },
+
   // 练车逻辑
   serviceLogic: function (resObj) {
     let _this = this;
@@ -553,7 +559,7 @@ Page({
 
     if (coach) {
       let coachId = coach.userId;
-      let coachName = coach.name;
+      let coachName = coach.name || coach.phone;
 
       // 如果没有新教练
       if (!currentCoach) {
@@ -607,11 +613,17 @@ Page({
       } else {//是同一个教练
         //3.判断有无课程及跳转(判断是否来自微信公众号)
         if (hasObj) {
+          let backtrack = wx.getStorageSync('backtrack');
 
           // 标记为无课程
           _this.setData({
             courseFlag: false
           })
+
+          if (backtrack) {
+            // 跳转逻辑
+            _this.JumpModel();
+          }
 
         } else {
           // 发送练车请求
@@ -689,6 +701,7 @@ Page({
    */
   onUnload: function () {
     wx.removeStorageSync('specialTag');
+    wx.removeStorageSync('backtrack');
   },
 
   /**

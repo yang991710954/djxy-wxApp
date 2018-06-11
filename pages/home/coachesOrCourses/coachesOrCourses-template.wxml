@@ -6,7 +6,7 @@
          <image class='coachImg' src='/images/coachImg.png'></image> 
       </view>
       <view class='coachBox'>
-        <text class="coachName">{{coachName}}</text>
+        <text class="coachName">{{coachName || '滴驾教练'}}</text>
         <image class="coachJump" src='/images/jump.png'></image>
       </view>
     </view>

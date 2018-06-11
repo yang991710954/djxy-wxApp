@@ -8,13 +8,12 @@ import {
 } from '../../utils/util.js';
 
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    coachName: '未知',
-    drivingschool: '未知',
+    coachName: '滴驾教练',
+    drivingschool: '滴驾',
     drivingage: 0
   },
 
@@ -77,8 +76,8 @@ Page({
     let coachInfo = JSON.parse(wx.getStorageSync('COACH_INFO')) || {};
 
     this.setData({
-      coachName: coachInfo.name || '未知',
-      drivingschool: coachInfo.drivingschool || '未知',
+      coachName: coachInfo.name || coachInfo.phone,
+      drivingschool: coachInfo.drivingschool || '滴驾',
       drivingage: coachInfo.drivingage || 0
     })
   },

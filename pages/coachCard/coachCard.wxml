@@ -9,7 +9,7 @@
       <view class='coachStatusBox'>
         <view class='coachStatus'>
           <view class='coachName'>
-            <text class='nameStyle'>{{coachName}}</text>
+            <text class='nameStyle'>{{coachName || '滴驾教练'}}</text>
           </view>
 
           <view class='schoolAge'>

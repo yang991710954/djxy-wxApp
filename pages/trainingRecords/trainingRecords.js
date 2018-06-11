@@ -93,40 +93,41 @@ Page({
             isQueryShow: true
           })
           trainList.forEach(function (item, index) {
+
             if (item.totalScore) {
               totalNum += item.totalScore;
+
+              if (item.startTime) {
+                var startdata = item.startTime.split(' ')[0].replace(/-/g, '');
+                var recordDate = startdata.substr(0, 4) + '年' + startdata.substr(4, 2) + '月' + startdata.substr(6, 2) + '日'
+
+                var startdataTime = item.startTime.split(' ')[1];
+                startdataTime = startdataTime.substring(0, 5);
+              }
+
+              if (item.endTime) {
+                var endDateTime = item.endTime.split(' ')[1];
+                endDateTime = endDateTime.substring(0, 5);
+
+              } else {
+
+                var endDateTime = item.startTime.split(' ')[1];
+                endDateTime = endDateTime.substring(0, 5);
+              }
+
+              let temporal = (startdataTime || '未知') + '-' + (endDateTime || '未知');
+
+              _this.data.recordArr.push({
+                recordDate: recordDate || '未知',//练车日期
+                mode: _this.returnTagValue(item.mode),//练车模式
+                temporal: temporal,//时间区间
+                lineName: item.lineName || '无线路名',//考场名称
+                coachName: item.coacherName || '未知',//教练名字
+                totalScore: item.totalScore || '未知',//成绩
+                itemIndex: index, //编号
+                userId: item.id //用户Id
+              })
             }
-
-            if (item.startTime) {
-              var startdata = item.startTime.split(' ')[0].replace(/-/g, '');
-              var recordDate = startdata.substr(0, 4) + '年' + startdata.substr(4, 2) + '月' + startdata.substr(6, 2) + '日'
-
-              var startdataTime = item.startTime.split(' ')[1];
-              startdataTime = startdataTime.substring(0, 5);
-            }
-
-            if (item.endTime) {
-              var endDateTime = item.endTime.split(' ')[1];
-              endDateTime = endDateTime.substring(0, 5);
-
-            } else {
-
-              var endDateTime = item.startTime.split(' ')[1];
-              endDateTime = endDateTime.substring(0, 5);
-            }
-
-            let temporal = (startdataTime || '未知') + '-' + (endDateTime || '未知');
-
-            _this.data.recordArr.push({
-              recordDate: recordDate || '未知',//练车日期
-              mode: _this.returnTagValue(item.mode),//练车模式
-              temporal: temporal,//时间区间
-              lineName: item.lineName || '无线路名',//考场名称
-              coachName: item.coacherName || '未知',//教练名字
-              totalScore: item.totalScore || '未知',//成绩
-              itemIndex: index, //编号
-              userId: item.id //用户Id
-            })
           })
 
           // 设置数据
@@ -197,40 +198,41 @@ Page({
             isPracticeShow: true
           })
           trainList.forEach(function (item, index) {
+
             if (item.totalScore) {
               totalNum += item.totalScore;
+
+              if (item.startTime) {
+                var startdata = item.startTime.split(' ')[0].replace(/-/g, '');
+                var recordDate = startdata.substr(0, 4) + '年' + startdata.substr(4, 2) + '月' + startdata.substr(6, 2) + '日'
+
+                var startdataTime = item.startTime.split(' ')[1];
+                startdataTime = startdataTime.substring(0, 5);
+              }
+
+              if (item.endTime) {
+                var endDateTime = item.endTime.split(' ')[1];
+                endDateTime = endDateTime.substring(0, 5);
+
+              } else {
+
+                var endDateTime = item.startTime.split(' ')[1];
+                endDateTime = endDateTime.substring(0, 5);
+              }
+
+              let temporal = (startdataTime || '未知') + '-' + (endDateTime || '未知');
+
+              _this.data.recordArr.push({
+                recordDate: recordDate || '未知',//练车日期
+                mode: _this.returnTagValue(item.mode),//练车模式
+                temporal: temporal,//时间区间
+                lineName: item.lineName || '无线路名',//考场名称
+                coachName: item.coacherName || '未知',//教练名字
+                totalScore: item.totalScore || '未知',//成绩
+                itemIndex: index, //编号
+                userId: item.id //用户Id
+              })
             }
-
-            if (item.startTime) {
-              var startdata = item.startTime.split(' ')[0].replace(/-/g, '');
-              var recordDate = startdata.substr(0, 4) + '年' + startdata.substr(4, 2) + '月' + startdata.substr(6, 2) + '日'
-
-              var startdataTime = item.startTime.split(' ')[1];
-              startdataTime = startdataTime.substring(0, 5);
-            }
-
-            if (item.endTime) {
-              var endDateTime = item.endTime.split(' ')[1];
-              endDateTime = endDateTime.substring(0, 5);
-
-            } else {
-
-              var endDateTime = item.startTime.split(' ')[1];
-              endDateTime = endDateTime.substring(0, 5);
-            }
-
-            let temporal = (startdataTime || '未知') + '-' + (endDateTime || '未知');
-
-            _this.data.recordArr.push({
-              recordDate: recordDate || '未知',//练车日期
-              mode: _this.returnTagValue(item.mode),//练车模式
-              temporal: temporal,//时间区间
-              lineName: item.lineName || '无线路名',//考场名称
-              coachName: item.coacherName || '未知',//教练名字
-              totalScore: item.totalScore || '未知',//成绩
-              itemIndex: index, //编号
-              userId: item.id //用户Id
-            })
           })
 
           // 设置数据
