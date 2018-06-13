@@ -8,6 +8,7 @@ import {
   wxCloseAppOnError
 } from '../../utils/util.js';
 
+const App = getApp();//获取应用实例
 const promise = require("../../utils/promise.min.js");
 
 Page({
@@ -79,7 +80,20 @@ Page({
       isShow: false
     })
 
-    //1.1判断用户有无绑定微信,没有则跳转到登录
+    // 校验openid
+    if (resObj.openid) {
+
+      // 保存openid到全局
+      App.globalData.g_openid = resObj.openid;
+
+    } else {
+      wxReloadPage('网络请求失败，滴驾正在为您重新加载数据！', function () {
+        _this.onShow();
+      })
+      return;
+    }
+
+    //判断用户有无绑定微信,没有则跳转到登录
     if (!resObj.bindWeixin) {
       wx.redirectTo({
         url: '/pages/myInfo/bindUser/bindUser',
@@ -87,7 +101,7 @@ Page({
       return;
     }
 
-    //1.2获取token并缓存起来
+    //获取token并缓存起来
     if (resObj.accessToken) {
       wx.setStorageSync('SESSION_KEY', resObj.accessToken);
     }
@@ -227,7 +241,6 @@ Page({
 
               if (resObj) {
                 resolve(resObj);
-                wx.setStorageSync('OPEN_ID', resObj.openid);
 
                 console.log('执行完成');
 
@@ -276,15 +289,17 @@ Page({
     // 获取首页图片
     this.getActiveImg();
 
-    wx.setStorageSync('model', model);
-    wx.setStorageSync('coachId', coachId);
+    // 保存coachId\model到全局
+    App.globalData.g_state = coachId;
+    App.globalData.g_model = model;
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    // 测试调用全局数据
+    console.log(App.globalData);
   },
 
   /**
@@ -316,7 +331,20 @@ Page({
             isShow: false
           })
 
-          //1.1判断用户有无绑定微信,没有则跳转到登录
+          // 校验openid
+          if (resObj.openid) {
+
+            // 保存openid到全局
+            App.globalData.g_openid = resObj.openid;
+
+          } else {
+            wxReloadPage('网络请求失败，滴驾正在为您重新加载数据！', function () {
+              _this.onShow();
+            })
+            return;
+          }
+
+          //判断用户有无绑定微信,没有则跳转到登录
           if (!resObj.bindWeixin) {
             wx.redirectTo({
               url: '/pages/myInfo/bindUser/bindUser',
@@ -324,7 +352,7 @@ Page({
             return;
           }
 
-          //1.2获取token并缓存起来
+          //获取token并缓存起来
           if (resObj.accessToken) {
             wx.setStorageSync('SESSION_KEY', resObj.accessToken);
           }

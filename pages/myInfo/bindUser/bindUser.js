@@ -10,6 +10,8 @@ import {
   wxCloseAppOnError
 } from '../../../utils/util.js';
 
+const App = getApp();//获取应用实例
+
 Page({
 
   /**
@@ -20,9 +22,6 @@ Page({
     phoneNumber: '',
     verification: '',
     victoryFlag: true,
-    openId: '',
-    state: '',
-    model: ''
   },
 
   bindPhoneInput: function (e) {
@@ -131,9 +130,9 @@ Page({
     let _this = this;
     let phone = this.data.phoneNumber.trim();
     let verification = this.data.verification.trim();
-    let openId = this.data.openId;
-    let model = this.data.model;
-    let coachId = this.data.state;
+    let openId = App.globalData.g_openid;
+    let coachId = App.globalData.g_coachId;
+    let model = App.globalData.g_model;
 
     if (!phone) {
       wx.showToast({
@@ -188,9 +187,6 @@ Page({
       },
       contentType: 'application/x-www-form-urlencoded',
       success: function ({ data }) {
-        console.log('stu_min_app_register')
-        console.log(data)
-        console.log('stu_min_app_register')
 
         //短信码错误停止运行
         if (data.error) {
@@ -277,6 +273,14 @@ Page({
       let coachId = coach.userId;
       let coachName = coach.name || coach.phone;
 
+      // 如果没有新教练
+      if (!currentCoach) {
+        wx.switchTab({
+          url: '/pages/home/home',
+        })
+        return;
+      }
+
       let newCoach = resObj.newCoach;
       let newCoachId = newCoach.coachId;
 
@@ -332,6 +336,14 @@ Page({
         }
       }
     } else {
+      // 如果没有新教练
+      if (!currentCoach) {
+        wx.switchTab({
+          url: '/pages/home/home',
+        })
+        return;
+      }
+
       // 通过参数查询扫码教练id
       let currentCoachId = currentCoach.coachId;
       console.log(currentCoachId)
@@ -343,7 +355,7 @@ Page({
 
   // 跳转逻辑
   JumpModel: function () {
-    let model = this.data.model;
+    let model = App.globalData.g_model;
 
     if (model === 'from_zdpp') {
       wx.redirectTo({
@@ -427,11 +439,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      openId: wx.getStorageSync('OPEN_ID') || '',
-      state: wx.getStorageSync('coachId') || '',
-      model: wx.getStorageSync('model') || ''
-    })
+
   },
 
   /**
