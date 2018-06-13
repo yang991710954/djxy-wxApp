@@ -12,12 +12,12 @@
   margin-top: 10rpx;
 }
 
-.recordTime{
+.recordTime {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.recordTime>text:nth-child(2){
+.recordTime>text:nth-child(2) {
   color: #19a2ff;
 }

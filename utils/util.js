@@ -142,7 +142,7 @@ const httpRequest = (params) => {
 
 // 获取URL参数
 const returnUrlObj = (url) => {
-  if(!url){
+  if (!url) {
     return {};
   }
   var strArr = url.split('?')[1];
@@ -191,6 +191,20 @@ const wxCloseAppOnError = function (content) {
   })
 }
 
+// 重新加载页面
+const wxReloadPage = function (content, callback) {
+  wx.showModal({
+    title: '温馨提示',
+    content: content,
+    showCancel: false,
+    success: function (res) {
+      if (res.confirm) {
+        callback && callback();
+      }
+    }
+  })
+}
+
 //通用失败提示信息
 const showMessage = function (content) {
   wx.showToast({
@@ -218,8 +232,8 @@ const LOCAL_ID = '192.168.1.7';
 
 // 环境配置
 // const APIHOST = "https://dev.yirenzn.com/"; // test
-const APIHOST = "https://pre.yirenzn.com/"; // stage
-// const APIHOST = "https://api.dj23.cn/"; // production
+// const APIHOST = "https://pre.yirenzn.com/"; // stage
+const APIHOST = "https://api.dj23.cn/"; // production
 
 // 课程图片地址
 const COURSES_IMGURL_01 = 'http://dj-static.oss-cn-shenzhen.aliyuncs.com/commodity/image/intelligence_course_01.png'
@@ -236,6 +250,7 @@ module.exports = {
   wxCloseApp,
   showMessage,
   shareMessage,
+  wxReloadPage,
   imgList: [
     COURSES_IMGURL_01,
     COURSES_IMGURL_02,

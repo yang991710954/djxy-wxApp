@@ -489,11 +489,18 @@ Page({
           _this.serviceLogic(resObj);
 
         } else {
-          wxCloseAppOnError('系统错误，请稍后重试！')
+          showMessage('请求数据失败');
         }
       },
       error: function (err) {
-        wxCloseAppOnError('系统错误，请稍后重试！')
+        if (err.errMsg === "request:fail timeout") {
+
+          showMessage('网络请求超时');
+
+        } else {
+
+          showMessage('网络请求失败');
+        }
       }
     })
   },
@@ -659,7 +666,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    wx.removeStorageSync('isScanQR');
   },
 
   /**

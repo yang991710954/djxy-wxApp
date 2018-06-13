@@ -6,7 +6,8 @@ import {
   showMessage,
   shareMessage,
   returnUrlObj,
-  returnUrlParam
+  returnUrlParam,
+  wxCloseAppOnError
 } from '../../../utils/util.js';
 
 Page({
@@ -19,9 +20,9 @@ Page({
     phoneNumber: '',
     verification: '',
     victoryFlag: true,
-    state: wx.getStorageSync('coachId') || '',
-    openId: wx.getStorageSync('OPEN_ID'),
-    token: wx.getStorageSync('SESSION_KEY')
+    openId: '',
+    state: '',
+    model: ''
   },
 
   bindPhoneInput: function (e) {
@@ -43,6 +44,9 @@ Page({
 
   // 请求验证码
   getVerification: function () {
+    let _this = this;
+    let phone = this.data.phoneNumber.trim();
+
     if (!this.data.victoryFlag) {
       wx.showToast({
         title: '请勿重复请求',
@@ -52,7 +56,7 @@ Page({
       })
       return;
     }
-    let phone = this.data.phoneNumber.trim();
+
     if (!phone) {
       wx.showToast({
         title: '请输入手机号',
@@ -62,6 +66,7 @@ Page({
       })
       return false;
     }
+
     if (!phoneReg.test(phone)) {
       wx.showToast({
         title: '手机号码不规范',
@@ -71,9 +76,6 @@ Page({
       })
       return false;
     }
-
-
-    let _this = this;
 
     // 请求验证码
     httpRequest({
@@ -129,6 +131,10 @@ Page({
     let _this = this;
     let phone = this.data.phoneNumber.trim();
     let verification = this.data.verification.trim();
+    let openId = this.data.openId;
+    let model = this.data.model;
+    let coachId = this.data.state;
+
     if (!phone) {
       wx.showToast({
         title: '请输入手机号',
@@ -158,16 +164,27 @@ Page({
       return false;
     }
 
+    if (!openId) {
+      wx.showToast({
+        title: '未获取到openId',
+        icon: 'none',
+        image: '/images/exclamation.png',
+        duration: 2000
+      })
+      return false;
+    }
+
     // 请求授权
     httpRequest({
+      loading: true,
       url: APIHOST + 'api/base/user/f/stu_min_app_register',
       method: 'post',
       data: {
+        user_type: 1,
         user_id: phone,
         code: verification,
-        user_type: 1,
-        openid: _this.data.openId,
-        state: _this.data.state
+        openid: openId,
+        state: coachId
       },
       contentType: 'application/x-www-form-urlencoded',
       success: function ({ data }) {
@@ -178,120 +195,55 @@ Page({
         //短信码错误停止运行
         if (data.error) {
           wx.showToast({
-            title: data.error.message,
+            title: '授权失败',
             icon: 'none',
             image: '/images/exclamation.png',
             duration: 2000
           })
           return;
         }
-        let dataObj = {
-          url: APIHOST + '/se/oauth/token',
-          login_type: 0,
-          password: _this.data.openId,
-          username: phone,
-          grant_type: 'password',
-          oauth_code: 'Basic ZGphcHA6ZTRhMjdjNDUtY2M4Ni00NjUxLThlNDAtMTY0YTkzODkyMWMx'
-        }
 
-        // 请求并跳转页面
-        httpRequest({
-          loading: true,
-          url: APIHOST + 'api/ui/base/user/get_auth_token?' + returnUrlParam(dataObj),
-          method: 'post',
-          success: function ({ data }) {
-            let resData = data.result;
-            console.log('get_auth_token')
-            console.log(resData)
-            console.log('get_auth_token')
-
-            if (!resData) {
-              wx.showToast({
-                title: '获取token失败',
-                icon: 'none',
-                image: '/images/exclamation.png',
-                duration: 2000
-              })
-              return;
-            }
-            let accessResult = JSON.parse(resData);
-
-            _this.setData({
-              token: accessResult.access_token
-            })
-
-            //将用户信息缓存起来
-            wx.setStorageSync('SESSION_KEY', _this.data.token);
-
-            wx.vibrateLong({
-              success: function () {
-                wx.showToast({
-                  title: '授权成功',
-                  icon: 'success',
-                  duration: 2000
-                })
-              }
-            })
-
-            // 判断用户是否有课程
+        // 登录
+        wx.login({
+          success: res => {
+            // 发送 res.code 到后台换取 openId, sessionKey, unionId
             httpRequest({
-              url: APIHOST + 'api/v3/driving/driving/student/has_packages_driving_voucher',
-              success: function (res) {
-                let resData = res.data.result;
-                console.log(resData)
-                if (resData) {
-                  //有课程绑定教练和跳转练车
-                  wx.switchTab({
-                    url: '/pages/home/home',
-                  })
+              loading: true,
+              url: APIHOST + 'api/base/binding_checking_api/f/binding_checking_stu_min_app',
+              contentType: 'application/x-www-form-urlencoded',
+              method: 'post',
+              data: {
+                code: res.code,
+                state: coachId
+              },
+              success: function ({ data }) {
+                let resObj = data.result;
+                console.log(resObj)
+
+                //获取token并缓存起来
+                if (resObj.accessToken) {
+                  wx.setStorageSync('SESSION_KEY', resObj.accessToken);
+                }
+
+                if (resObj) {
+                  // 练车逻辑
+                  _this.serviceLogic(resObj);
+
                 } else {
-                  httpRequest({
-                    url: APIHOST + 'api/v3/driving/driving/student/has_driving_voucher',
-                    success: function (res) {
-                      let resData = res.data.result;
-                      console.log(resData)
-                      if (resData) {
-                        //有体验券绑定教练和跳转练车
-                        wx.switchTab({
-                          url: '/pages/home/home',
-                        })
-                      } else {
-                        //啥都没有直接绑定教练买课程
-                        wx.redirectTo({
-                          url: '/pages/purchaseCourse/purchaseCourse',
-                        })
-                      }
-                    },
-                    error: function (err) {
-                      console.log(err)
-                      wx.showToast({
-                        title: '请求出错,请重试!',
-                        icon: 'none',
-                        image: '/images/exclamation.png',
-                        duration: 2000
-                      })
-                    }
-                  })
+
+                  wxCloseAppOnError('请求数据失败，请稍后重试！');
                 }
               },
               error: function (err) {
-                console.log(err)
-                wx.showToast({
-                  title: '请求出错,请重试!',
-                  icon: 'none',
-                  image: '/images/exclamation.png',
-                  duration: 2000
-                })
+                if (err.errMsg && err.errMsg === "request:fail timeout") {
+
+                  wxCloseAppOnError('网络请求超时，请稍后重试！')
+
+                } else {
+
+                  wxCloseAppOnError('网络请求失败，请稍后重试！')
+                }
               }
-            })
-          },
-          error: function (err) {
-            console.log(err)
-            wx.showToast({
-              title: '请求出错,请重试!',
-              icon: 'none',
-              image: '/images/exclamation.png',
-              duration: 2000
             })
           }
         })
@@ -308,11 +260,178 @@ Page({
     })
   },
 
+  // 练车逻辑
+  serviceLogic: function (resObj) {
+    let _this = this;
+
+    let coach = resObj.coach;
+    let currentCoach = resObj.newCoach;
+
+    let courseInfo = resObj.hasCourse;
+    let voucherInfo = resObj.hasVoucher;
+
+    let courseObj = courseInfo || voucherInfo;
+    let hasObj = !courseInfo && !voucherInfo;
+
+    if (coach) {
+      let coachId = coach.userId;
+      let coachName = coach.name || coach.phone;
+
+      let newCoach = resObj.newCoach;
+      let newCoachId = newCoach.coachId;
+
+      // 对比当前扫码教练和老教练
+      if (coachId != newCoachId) { //不是同一个教练
+
+        // 重新绑定关系
+        UnbundlingRelationship();
+
+        // 解绑老教练绑定新教练
+        function UnbundlingRelationship() {
+          //询问框
+          wx.showModal({
+            title: '温馨提示',
+            content: '您需要先解除 ' + coachName + ' 教练的绑定才能进行后续操作（解除绑定后之前购买的课程也会失效）',
+            confirmText: '现在绑定',
+            success: function (res) {
+              if (res.confirm) {
+                //解绑教练
+                httpRequest({
+                  loading: true,
+                  url: APIHOST + '/api/v3/driving/driving/student/unbind_coach',
+                  success: function ({ data }) {
+                    if (data.result) {
+
+                      //绑定教练
+                      _this.bindCoach(newCoachId, courseObj);
+
+                    } else {
+                      showMessage('解绑教练失败')
+                    }
+                  },
+                  error: function () {
+                    showMessage('解绑教练出错')
+                  }
+                })
+              } else if (res.cancel) {
+                wxCloseAppOnError('您已放弃练车')
+              }
+            }
+          })
+        }
+      } else {//是同一个教练
+        //3.判断有无课程及跳转(判断是否来自微信公众号)
+        if (hasObj) {
+
+          // 跳转逻辑
+          _this.JumpModel();
+
+        } else {
+          // 发送练车请求
+          _this.sendPracticeRequest();
+        }
+      }
+    } else {
+      // 通过参数查询扫码教练id
+      let currentCoachId = currentCoach.coachId;
+      console.log(currentCoachId)
+
+      //绑定教练
+      _this.bindCoach(currentCoachId)
+    }
+  },
+
+  // 跳转逻辑
+  JumpModel: function () {
+    let model = this.data.model;
+
+    if (model === 'from_zdpp') {
+      wx.redirectTo({
+        url: '/pages/purchaseCourse/purchaseCourse',
+      })
+    } else {
+      wx.redirectTo({
+        url: '/pages/selectTrainingMode/selectTrainingMode',
+      })
+    }
+  },
+
+  // 发送练车请求
+  sendPracticeRequest: function () {
+    let _this = this;
+
+    httpRequest({
+      loading: true,
+      url: APIHOST + 'api/v3/driving/driving/student/student_apply',
+      method: 'post',
+      success: function ({ data }) {
+        if (data.result) {
+          wx.showToast({
+            title: '练车请求成功',
+            icon: 'success',
+            duration: 2000
+          })
+
+          setTimeout(function () {
+            wx.switchTab({
+              url: '/pages/home/home',
+            })
+          }, 1000)
+
+        } else {
+          showMessage('练车请求失败');
+        }
+      },
+      error: function () {
+        showMessage('练车请求出错');
+      }
+    })
+  },
+
+  //绑定教练
+  bindCoach: function (newCoachId, courseObj) {
+    let _this = this;
+
+    httpRequest({
+      loading: true,
+      url: APIHOST + '/api/base/s_stu_info_api/bind_coach',
+      data: { coachId: newCoachId },
+      success: function ({ data }) {
+        if (data.result) {
+
+          wx.showToast({
+            title: '绑定教练成功',
+            icon: 'success',
+            duration: 2000
+          })
+
+          if (courseObj) {
+            // 发送练车请求
+            _this.sendPracticeRequest();
+          } else {
+            // 跳转逻辑
+            _this.JumpModel();
+          }
+
+        } else {
+          showMessage('绑定教练失败')
+        }
+      },
+      error: function () {
+        showMessage('绑定教练出错')
+      }
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.setData({
+      openId: wx.getStorageSync('OPEN_ID') || '',
+      state: wx.getStorageSync('coachId') || '',
+      model: wx.getStorageSync('model') || ''
+    })
   },
 
   /**

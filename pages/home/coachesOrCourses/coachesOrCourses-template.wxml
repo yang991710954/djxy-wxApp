@@ -3,7 +3,7 @@
     <!-- 教练信息 -->
     <view class="coachInfo" bindtap='jumpCoachCard'>
       <view class='coachImgBox'>
-         <image class='coachImg' src='/images/coachImg.png'></image> 
+        <image class='coachImg' src='/images/coachImg.png'></image>
       </view>
       <view class='coachBox'>
         <text class="coachName">{{coachName || '滴驾教练'}}</text>

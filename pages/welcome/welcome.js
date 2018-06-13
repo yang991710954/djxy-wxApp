@@ -4,6 +4,7 @@ import {
   httpRequest,
   showMessage,
   shareMessage,
+  wxReloadPage,
   wxCloseAppOnError
 } from '../../utils/util.js';
 
@@ -38,10 +39,21 @@ Page({
           _this.setData({
             activeUrl: resObj[0].link
           })
+
+          wx.setStorageSync('ActiveImg', resObj[0].link);
+
+        } else {
+          // 没获取到读缓存
+          _this.setData({
+            activeUrl: wx.getStorageSync('ActiveImg')
+          })
         }
       },
       error: function () {
-        showMessage('获取图片失败')
+        // 没获取到读缓存
+        _this.setData({
+          activeUrl: wx.getStorageSync('ActiveImg')
+        })
       }
     })
   },
@@ -73,6 +85,11 @@ Page({
         url: '/pages/myInfo/bindUser/bindUser',
       })
       return;
+    }
+
+    //1.2获取token并缓存起来
+    if (resObj.accessToken) {
+      wx.setStorageSync('SESSION_KEY', resObj.accessToken);
     }
 
     // 没有当前扫码教练
@@ -157,7 +174,7 @@ Page({
 
             }
           } else {
-            showMessage('绑定教练失败')
+            showMessage('绑定教练失败');
           }
         },
         error: function () {
@@ -206,15 +223,22 @@ Page({
             success: function ({ data }) {
               let resObj = data.result;
 
+              console.log(resObj);
+
               if (resObj) {
                 resolve(resObj);
                 wx.setStorageSync('OPEN_ID', resObj.openid);
 
                 console.log('执行完成');
+
               } else {
-                reject('系统错误，请稍后重试！');
-                console.log('系统错误，请稍后重试！');
+                reject(data);
+
+                console.log('执行完成');
               }
+            },
+            error: function (err) {
+              reject(err);
             }
           })
         }
@@ -223,16 +247,16 @@ Page({
     return PromiseObj;
   },
 
-  // 页面跳转逻辑
-  JumpLogic: function () {
-
-  },
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let _this = this;
+    // 清楚缓存
+    wx.removeStorageSync('model');
+    wx.removeStorageSync('OPEN_ID');
+    wx.removeStorageSync('SESSION_KEY');
+    wx.removeStorageSync('isUnbind');
+    wx.removeStorageSync('specialTag');
 
     // options 中的 scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     // let scene = decodeURIComponent(options.scene)
@@ -254,7 +278,20 @@ Page({
 
     wx.setStorageSync('model', model);
     wx.setStorageSync('coachId', coachId);
+  },
 
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    let _this = this;
     // 初始化数据
     this.initData()
       .then(function (data) {
@@ -285,6 +322,11 @@ Page({
               url: '/pages/myInfo/bindUser/bindUser',
             })
             return;
+          }
+
+          //1.2获取token并缓存起来
+          if (resObj.accessToken) {
+            wx.setStorageSync('SESSION_KEY', resObj.accessToken);
           }
 
           // 没有当前扫码教练
@@ -384,32 +426,22 @@ Page({
 
       }, function (err) {
 
-        showMessage('初始化失败')
         console.log('rejected');
 
+        if (err.errMsg && err.errMsg === "request:fail timeout") {
+
+          wxReloadPage('网络请求超时，滴驾正在为您重新加载数据！', function () {
+            _this.onShow();
+          })
+
+        } else {
+
+          wxReloadPage('网络请求失败，滴驾正在为您重新加载数据！', function () {
+            _this.onShow();
+          })
+        }
+
       })
-      .catch(function (err) {
-
-        console.log('catch');
-        wxCloseAppOnError('系统错误，请稍后重试！')
-
-      });
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    // 移除标记
-    wx.removeStorageSync('isUnbind');
-    wx.removeStorageSync('specialTag');
   },
 
   /**

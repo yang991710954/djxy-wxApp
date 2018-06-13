@@ -6,7 +6,8 @@ import {
   APP_ID,
   APP_SECRET,
   imgList,
-  showMessage
+  showMessage,
+  wxReloadPage
 } from '../../../utils/util.js';
 
 Page({
@@ -23,6 +24,14 @@ Page({
   // 购买课程
   getPurchaseNow: function () {
     let _this = this;
+
+    if (!this.data.coursePrice){
+      wxReloadPage('数据异常，滴驾正在为您重新加载数据！', function () {
+        this.onReady();
+      })
+      return;
+    }
+
     let createorder = {
       skuId: _this.data.skuId,
       skuNum: _this.data.purchaseQuantity

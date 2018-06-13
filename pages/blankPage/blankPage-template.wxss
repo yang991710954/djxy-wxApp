@@ -1,20 +1,20 @@
-.blank-container{
+.blank-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 300rpx; 
+  padding-top: 300rpx;
 }
 
-.nodataImg{
+.nodataImg {
   height: 240rpx;
   margin-bottom: 50rpx;
 }
 
-.nodataTxt{
+.nodataTxt {
   font-size: 34rpx;
   color: #999;
 }
 
-page{
+page {
   background-color: #f5f5f5;
 }

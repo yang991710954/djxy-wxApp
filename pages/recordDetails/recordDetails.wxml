@@ -25,7 +25,7 @@
     <block wx:for="{{pointsRecordList}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
       <template is='recordDetailTemplate' data="{{...item}}" />
     </block>
-    
+
     <view class='noMore'>
       <text>没有更多数据了</text>
     </view>
